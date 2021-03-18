@@ -1,4 +1,6 @@
-//import {ENVIRONMENT as ENV, API_URL as API_LINK, API_STORAGE as API_STORAGES} from "@env"
+import ENVDATA from "../../env.json"
+
+console.log(ENVDATA)
 
 import {
     Platform
@@ -15,14 +17,12 @@ var config = {
 export default config
 export const BASE_WIDTH = 360
 export const BASE_HEIGHT = 640
-export const API_URL = 'http://192.168.0.114:3002'
-export const API_STORAGE = 'http://192.168.0.114:3002'
+export const API_URL = ENVDATA.API_URL
+export const API_STORAGE = ENVDATA.API_STORAGE
 export const LOCALES = {
 	ENGLISH: { id: 1, name: "en", label: "ENGLISH" },
 	ARABIC: { id: 2, name: "ar", label: "ARABIC" }
 };
-export const BUSINESS_CONTACT = '+919804874403'
-export const BUSINESS_EMAIL = 'admin@ditinex.com'
-export const DOMAIN = 'ditinex.com'
-export const APP_URL = 'https://play.google.com/store/apps/details?id=com.ditinex.swipecrush' 
-export const ENVIRONMENT = 'DEV'
+export const DOMAIN = ''
+export const APP_URL = '' 
+export const ENVIRONMENT = ENVDATA.ENVIRONMENT
