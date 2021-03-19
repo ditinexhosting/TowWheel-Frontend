@@ -1,31 +1,17 @@
 import {
     StyleSheet,
 } from 'react-native';
-import { Colors, Mixins, Spacing, Typography } from 'src/styles'
+import { Mixins, Spacing, Typography } from 'src/styles'
 
 const styles = StyleSheet.create({
-    backgroundContainer: {
+    container:{
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: Colors.background
-    },
-    splash_top: {
-        height: Mixins.scaleHeight(280),
-        //width: Mixins.scaleHeight(100),
-        resizeMode: 'contain',
-        //transform: [{ rotate: '-360deg' }]
+        backgroundColor: '#FF0000',
     },
     logo:{
         resizeMode: 'contain',
-        width: Mixins.scaleSize(180),
+        width: Mixins.scaleSize(250),
         height: Mixins.scaleSize(70),
-        marginTop: Mixins.scaleSize(20)
-    },
-    splash_loader: {
-        height: Mixins.scaleHeight(150),
-        width: '100%',
-        resizeMode: 'contain',
     }
 });
 

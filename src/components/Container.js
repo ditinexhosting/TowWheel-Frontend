@@ -7,9 +7,8 @@ import { Mixins } from 'src/styles'
 import { useTheme } from 'src/hooks' 
 
 const Container = ({ isTransparentStatusBar = false, ...props }) => {
-    const [Colors, styles] = useTheme(style)
     return (
-        <View style={[styles.flex1, styles.container, props.style]}>
+        <View style={[styles.container, props.style]}>
             {isTransparentStatusBar==false && <MyStatusBar />}
             {props.children}
         </View>
@@ -17,7 +16,6 @@ const Container = ({ isTransparentStatusBar = false, ...props }) => {
 }
 
 const MyStatusBar = ()=>{
-    const [Colors, styles] = useTheme(style)
     return(
         <View style={[styles.statusBar,{height: Mixins.STATUSBAR_HEIGHT}]}>
         </View>
@@ -25,12 +23,18 @@ const MyStatusBar = ()=>{
 }
 
 
-const style = {
+const styles = {
     container:{
-        backgroundColor: 'Colors.white'
+        flex: 1,
+        backgroundColor: '#F2F3F8'
     },
     statusBar:{
-        backgroundColor: 'Colors.primary'
+        position: 'absolute',
+        width: '100%',
+        top: 0,
+        left: 0,
+        zIndex: 999,
+        backgroundColor: '#040505'
     }
 };
 

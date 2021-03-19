@@ -1,6 +1,8 @@
 
 const LIGHT_THEME = {
     primary: '#F92452',
+    black: '#000000',
+    black80: 'rgba(0,0,0,0.8)',
     secondary: '#EF515F',
     medium: '#F4838A',
     light: '#FBD0CA',
@@ -8,7 +10,6 @@ const LIGHT_THEME = {
     gray: '#CCCDD0',
     deep_gray: '#949DA6',
     white: '#FFFFFF',
-    black: '#000000',
     background: '#FFFFFF',
     text: '#000000',
     muted_text: '#424242',
