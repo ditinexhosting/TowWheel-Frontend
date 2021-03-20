@@ -33,7 +33,7 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
             activeBackgroundColor={Colors.secondary20}
             {...props} 
             />*/}
-            <TouchableOpacity onPress={()=>navigation.navigate('login')}>
+            <TouchableOpacity onPress={()=>{navigation.toggleDrawer();navigation.push('Login')}}>
             <View style={styles.button}>
                 <View style={styles.buttonIconWrapper}>
                     <Icon name='sign-in' color={Colors.white} size={Typography.FONT_SIZE_22} />

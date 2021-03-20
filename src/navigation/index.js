@@ -9,11 +9,12 @@ const Stack = createStackNavigator();
 const Router = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home"
+      <Stack.Navigator initialRouteName="Login"
         mode="modal"
         headerMode="none"
       >
         <Stack.Screen name="Splash" component={Screen.Splash} />
+        <Stack.Screen name="Login" component={Screen.Login} />
         <Stack.Screen name="Home" >
           {props => <Drawer {...props} />}
         </Stack.Screen>

@@ -4,8 +4,11 @@ import {
     StyleSheet
 } from 'react-native';
 import { Mixins } from 'src/styles'
+import { useTheme } from 'src/hooks'
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Container = ({ isTransparentStatusBar = false, ...props }) => {
+    const [Colors, styles] = useTheme(style)
     return (
         <View style={[styles.container, props.style]}>
             {isTransparentStatusBar==false && <MyStatusBar />}
@@ -15,6 +18,7 @@ const Container = ({ isTransparentStatusBar = false, ...props }) => {
 }
 
 const MyStatusBar = ()=>{
+    const [Colors, styles] = useTheme(style)
     return(
         <View style={[styles.statusBar,{height: Mixins.STATUSBAR_HEIGHT}]}>
         </View>
@@ -22,15 +26,16 @@ const MyStatusBar = ()=>{
 }
 
 
-const styles = {
+const style = ({Colors})=>(StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#F2F3F8'
+        backgroundColor: Colors.background
     },
     statusBar:{
-        backgroundColor: '#040505'
+        backgroundColor: Colors.status_bar
     }
-};
+})
+);
 
 export default Container
 

@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import {
     createDrawerNavigator,
+    NavigationContainer,
     DrawerContentScrollView,
     DrawerItemList,
     DrawerItem

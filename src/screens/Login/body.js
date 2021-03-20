@@ -6,18 +6,11 @@ import {
     TouchableOpacity,
     TextInput
 } from 'react-native';
-import style from './style'
-import { Mixins } from 'src/styles'
-import { KeyboardHandledView } from 'src/components'
-import { Countries } from 'src/utils/Countries';
-import ModalSelector from 'react-native-modal-selector';
+import MobileInput from './mobileInput'
 
 const Body = ({ _this }) => {
-
     return (
-        <KeyboardHandledView offset={20}>
-            
-        </KeyboardHandledView>
+        <MobileInput _this={_this} />
     )
 }
 

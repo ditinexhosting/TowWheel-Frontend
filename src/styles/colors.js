@@ -7,9 +7,9 @@ const LIGHT_THEME = {
     secondary_very_light: '#FFCACA',
     secondary20: 'rgba(255,113,113,0.2)',
     grey: '#D7DDE2',
-    black: '#000000',
+    black: '#141414',
     white: '#FFF',
-    status_bar: '#262626',
+    status_bar: '#1A1A1A',
     background: '#F2F3F8',
     text: '#000000',
 }
