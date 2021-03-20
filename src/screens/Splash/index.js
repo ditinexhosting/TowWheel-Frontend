@@ -13,10 +13,12 @@ const Splash = ({ navigation }) => {
     const [Colors, styles] = useTheme(style)
     return (
         <Container style={styles.centerAll} isTransparentStatusBar={false}>
-            <Image
-                style={styles.logo}
-                source={logo}
-            />
+            <View style={styles.flex1, styles.centerAll}>
+                <Image
+                    style={styles.logo}
+                    source={logo}
+                />
+            </View>
         </Container>
     )
 }

@@ -16,7 +16,7 @@ export const ThemeProvider = (props) => {
 
     const [theme, setTheme] = useState(null);
     const themeKey = "@theme"
-    const [colors, setColors] = useState(null)
+    const [colors, setColors] = useState(Themes[ThemeKeys[0]])
 
     useEffect(() => {
         init()

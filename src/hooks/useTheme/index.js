@@ -9,9 +9,17 @@ const useTheme = (style={}) => {
   const replaceWithColor = (match, capture) => {
     return colors ? colors[capture]+'\"' : '#FFF'+'\"'
   }
-  const parsedStyle = JSON.parse(JSON.stringify(style).replace(/Colors.(.*?)\"/gi,replaceWithColor))
   const parsedCommonStyle = JSON.parse(JSON.stringify(Styles).replace(/Colors.(.*?)\"/gi,replaceWithColor))
-  const styles = useMemo(() => ({...parsedCommonStyle,...parsedStyle}), [theme]);
+  let styles = {}
+  if(typeof style == 'function'){
+    const parsedStyle = style({Colors:colors})
+    styles = useMemo(() => ({...parsedCommonStyle,...parsedStyle}), [theme]);
+  }
+  else{
+  const parsedStyle = JSON.parse(JSON.stringify(style).replace(/Colors.(.*?)\"/gi,replaceWithColor))
+  styles = useMemo(() => ({...parsedCommonStyle,...parsedStyle}), [theme]);
+  }
+
   return [colors,styles,theme,changeTheme,themeKeys]
 };
 

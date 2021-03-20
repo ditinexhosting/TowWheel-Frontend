@@ -1,5 +1,2 @@
 export { default as Splash } from './Splash'
-export { default as OnBoard } from './OnBoard'
-export { default as Login } from './Login'
-export { default as OtpVerification } from './OtpVerification'
 export { default as Home } from './Home'

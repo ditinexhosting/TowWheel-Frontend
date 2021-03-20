@@ -5,45 +5,23 @@ import {
     TouchableOpacity,
     Image
 } from 'react-native';
-import styles from './style'
-import { Colors, Styles, Mixins } from 'src/styles'
-import { API_STORAGE } from 'src/config';
-import { HeaderGradient } from 'src/components'
+import style from './style'
+import { Mixins } from 'src/styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useTheme } from 'src/hooks'
+import { hamburger } from 'src/assets'
 
 const Header = ({ _this }) => {
+    const [Colors, styles] = useTheme(style)
     return (
-        <HeaderGradient>  
-            <PrimaryContent user={_this.userDetails} />
-            <SecondaryButton />
-        </HeaderGradient>
-    )
-}
-
-const PrimaryContent = ({user})=>{
-    return user ? (
-        <View style={[Styles.flexRow,styles.headerContentWrapper]}>
-            <TouchableOpacity style={styles.profilePicWrapper}>
-                <Image source={{uri: API_STORAGE+user.profile_picture}} style={styles.profilePic} />
+        <View style={styles.header}>
+            <TouchableOpacity onPress={()=>_this.navigation.toggleDrawer()}>
+                <Image
+                    style={styles.hamburger}
+                    source={hamburger}
+                />
             </TouchableOpacity>
-            <View style={Styles.paddingLeft10}>
-                <Text numberOfLines={1} style={styles.name}>{user.name}</Text>
-                <Text numberOfLines={1} style={styles.username}>@{user.username}</Text>
-            </View>
         </View>
-    ) : null
-}
-
-const SecondaryButton = ()=>{
-    return(
-        <TouchableOpacity style={[Styles.centerAll, Styles.gradientHeaderSecondaryIconWrapper]}>
-                <View style={[Styles.centerAll]}>
-                        <Icon name='bell-o' size={18} color={Colors.primary} />
-                        <View style={[Styles.centerAll,Styles.gradientHeaderSecondaryBadge]}>
-                            <Text style={Styles.gradientHeaderSecondaryBadgeText}>99+</Text>
-                        </View>
-                </View>
-            </TouchableOpacity>
     )
 }
 
