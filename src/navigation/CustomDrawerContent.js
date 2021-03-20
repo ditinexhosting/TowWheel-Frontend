@@ -19,6 +19,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const CustomDrawerContent = ({ navigation, ...props }) => {
     const [Colors, styles] = useTheme(style)
+    const language = useLanguage()
     return (
         <DrawerContentScrollView
             contentContainerStyle={{
@@ -32,14 +33,28 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
             activeBackgroundColor={Colors.secondary20}
             {...props} 
             />*/}
+            <TouchableOpacity onPress={()=>navigation.navigate('login')}>
             <View style={styles.button}>
                 <View style={styles.buttonIconWrapper}>
                     <Icon name='sign-in' color={Colors.white} size={Typography.FONT_SIZE_22} />
                 </View>
-                <Text style={styles.buttonText}>Sign In</Text>
+                <Text style={styles.buttonText}>{language.t('sign_in')}</Text>
             </View>
+            </TouchableOpacity>
+            <View style={styles.seperator}></View>
             <DrawerItem
+                icon = {({ focused, color, size }) => <Icon color={color} size={size} name={'book'} />}
                 label="Help"
+                onPress={() => Linking.openURL('https://mywebsite.com/help')}
+            />
+            <DrawerItem
+                icon = {({ focused, color, size }) => <Icon color={color} size={size} name={'folder'} />}
+                label="FAQ"
+                onPress={() => Linking.openURL('https://mywebsite.com/help')}
+            />
+            <DrawerItem
+                icon = {({ focused, color, size }) => <Icon color={color} size={size} name={'save'} />}
+                label="Privacy Policy"
                 onPress={() => Linking.openURL('https://mywebsite.com/help')}
             />
         </DrawerContentScrollView>
@@ -48,17 +63,29 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
 
 const Header = () => {
     const [Colors, styles] = useTheme(style)
-    const language = useLanguage().language
+    const language = useLanguage()
+
+    const toggleLanguage = (locale)=>{
+        language.changeLanguage(locale)
+    }
+
     return (
         <View style={styles.header}>
+            <View style={[styles.flex1,styles.justifyEnd,styles.paddingBottom10,styles.paddingLeft10]}>
+                <View style={styles.profilePicture}>
+                    <Text style={styles.profilePictureAltText}>G</Text>
+                </View>
+                <Text style={styles.name}>Guest User</Text>
+                <Text style={styles.number}>Please sign in.</Text>
+            </View>
             <View style={styles.languageToggle}>
-                <TouchableOpacity style={[styles.flex1, styles.marginBottom10]}>
-                    <View style={[styles.languageButton,language=='en'?styles.languageButtonActive:null]}>
+                <TouchableOpacity onPress={()=>toggleLanguage('en')} style={[styles.marginBottom10]}>
+                    <View style={[styles.languageButton,language.language=='en'?styles.languageButtonActive:null]}>
                         <Text style={styles.languageOption}>🇺🇸</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.flex1]}>
-                    <View style={[styles.languageButton,language=='en'?styles.languageButtonActive:null]}>
+                <TouchableOpacity onPress={()=>toggleLanguage('he')}>
+                    <View style={[styles.languageButton,language.language=='he'?styles.languageButtonActive:null]}>
                         <Text style={styles.languageOption}>🇮🇱</Text>
                     </View>
                 </TouchableOpacity>
@@ -72,10 +99,11 @@ const style = ({ Colors }) => (StyleSheet.create({
         height: Mixins.scaleSize(140),
         backgroundColor: Colors.primary,
         marginBottom: Spacing.SCALE_20,
-        position: 'relative'
+        flexDirection: 'row'
     },
     button: {
         marginTop: Spacing.SCALE_30,
+        marginBottom: Spacing.SCALE_30,
         width: Mixins.scaleSize(150),
         alignSelf: 'center',
         alignItems: 'center',
@@ -98,15 +126,26 @@ const style = ({ Colors }) => (StyleSheet.create({
         alignItems: 'center',
         borderRadius: 50
     },
+    seperator:{
+        width: '90%',
+        alignSelf: 'center',
+        height: 1,
+        backgroundColor: Colors.grey
+    },
     languageToggle: {
-        position: 'absolute',
-        right: Spacing.SCALE_10,
-        top: Spacing.SCALE_10
+        width: Mixins.scaleSize(60),
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column'
     },
     languageButton: {
         borderWidth: 2,
         borderColor: Colors.primary_light,
-        padding: Spacing.SCALE_5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: Mixins.scaleSize(40),
+        height: Mixins.scaleSize(40),
         borderRadius: 50,
     },
     languageButtonActive:{
@@ -114,6 +153,27 @@ const style = ({ Colors }) => (StyleSheet.create({
     },
     languageOption: {
         fontSize: Typography.FONT_SIZE_25
+    },
+    profilePicture:{
+        backgroundColor: Colors.primary_dark,
+        width: Mixins.scaleSize(60),
+        height: Mixins.scaleSize(60),
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: Spacing.SCALE_8
+    },
+    profilePictureAltText:{
+        fontSize: Typography.FONT_SIZE_30,
+        color: Colors.secondary
+    },
+    name:{
+        fontSize: Typography.FONT_SIZE_16,
+        color: Colors.white
+    },
+    number:{
+        fontSize: Typography.FONT_SIZE_12,
+        color: Colors.secondary_very_light
     }
 }))
 

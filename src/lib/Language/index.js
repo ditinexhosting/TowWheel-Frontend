@@ -18,7 +18,7 @@ I18n.locale = LOCALES.ENGLISH.name;
 //Add new language files here
 I18n.translations = {
     en: require("src/utils/languages/en.json"),
-    ar: require("src/utils/languages/ar.json")
+    he: require("src/utils/languages/he.json")
 };
 
 export const LanguageContext = React.createContext({

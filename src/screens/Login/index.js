@@ -18,14 +18,14 @@ const Login = ({ route,navigation }) => {
   const [flag, setFlag] = useState('🇮🇳')
 
   const handleSubmit = async() => {
-    Ddux.setData('loading', true)
+    /*Ddux.setData('loading', true)
     if (phone.length<10)
-      return Toast.show({ type: 'error', message: 'Invalid mobile number.' })
+      return Toast.show({ type: 'error', message: 'Invalid mobile number.' })*/
 
     /*
      * API Login
      */
-    let mobileNumber = country.slice(1)+phone
+    /*let mobileNumber = country.slice(1)+phone
     let response = await API.sendOtp(mobileNumber)
     if (!response.status) {
       Toast.show({ type: 'error', message: response.error })
@@ -35,20 +35,12 @@ const Login = ({ route,navigation }) => {
       navigation.replace('OtpVerification',{mobile: mobileNumber, country: countryCode})
       console.log('OTP >>> ',response.data.otp)
     }
-    Ddux.setData('loading', false)
-  }
-
-  const _this = {
-    phone,setPhone,
-    country,setCountry,
-    flag,setFlag,
-    handleSubmit,
-    setCountryCode
+    Ddux.setData('loading', false)*/
   }
 
   return (
-    <Container>
-      <Body _this={_this} />
+    <Container isTransparentStatusBar={false}>
+      <Body _this={{}} />
     </Container>
   )
 }

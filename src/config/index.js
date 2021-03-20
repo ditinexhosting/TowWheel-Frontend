@@ -21,7 +21,7 @@ export const API_URL = ENVDATA.API_URL
 export const API_STORAGE = ENVDATA.API_STORAGE
 export const LOCALES = {
 	ENGLISH: { id: 1, name: "en", label: "ENGLISH" },
-	ARABIC: { id: 2, name: "ar", label: "ARABIC" }
+	HEBREW: { id: 2, name: "he", label: "HEBREW" }
 };
 export const DOMAIN = ''
 export const APP_URL = '' 

@@ -78,11 +78,20 @@ const styles = {
     fullWidth: {
         width: '100%'
     },
+    fullHeight: {
+        height: '100%'
+    },
     spaceAround:{
         justifyContent: 'space-around'
     },
     spaceBetween:{
         justifyContent: 'space-between'
+    },
+    justifyStart:{
+        justifyContent: 'flex-start'
+    },
+    justifyEnd:{
+        justifyContent: 'flex-end'
     },
     justifyCenter:{
         justifyContent: 'center'
