@@ -7,11 +7,15 @@ import {
     TextInput
 } from 'react-native';
 import MobileInput from './mobileInput'
+import MobileVerification from './mobileVerification'
 
 const Body = ({ _this }) => {
-    return (
-        <MobileInput _this={_this} />
-    )
+    if(_this.activeScreen == 1)
+    return <MobileInput _this={_this} />
+    else if(_this.activeScreen == 2)
+    return <MobileVerification _this={_this} />
+    else
+    return <MobileInput _this={_this} />
 }
 
 export default Body

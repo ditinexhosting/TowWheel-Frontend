@@ -12,6 +12,7 @@ const LIGHT_THEME = {
     status_bar: '#1A1A1A',
     background: '#F2F3F8',
     text: '#000000',
+    muted_text: '#B3B3B4'
 }
 
 const DARK_THEME = {

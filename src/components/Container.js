@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import { Mixins } from 'src/styles'
 import { useTheme } from 'src/hooks'
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Container = ({ isTransparentStatusBar = false, ...props }) => {
     const [Colors, styles] = useTheme(style)

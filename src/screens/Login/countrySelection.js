@@ -66,6 +66,7 @@ const CountrySelection = ({ selected, action }) => {
                 </View>
             </View>
             <SectionList
+                keyboardShouldPersistTaps='handled'
                 renderItem={({ item, index, section }) => (
                     <ItemView
                         item={item}
