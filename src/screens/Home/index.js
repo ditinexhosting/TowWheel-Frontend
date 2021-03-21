@@ -12,6 +12,7 @@ import { Colors, Styles } from 'src/styles'
 import { Container, Toast } from 'src/components'
 import API from 'src/services/api'
 import Header from './header'
+import Body from './body'
 import { useDdux, useTheme } from 'src/hooks'
 
 const Home = ({ navigation }) => {
@@ -27,6 +28,7 @@ const Home = ({ navigation }) => {
     return (
         <Container isTransparentStatusBar={true}>
             <Header _this={{navigation}} />
+            <Body />
         </Container>
     )
 }
