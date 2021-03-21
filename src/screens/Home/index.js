@@ -18,10 +18,15 @@ const Home = ({ navigation }) => {
     const isFocused = useIsFocused()
     const Ddux = useDdux()
 
+    useEffect(() => {
+        if(isFocused){
+            
+        }
+    }, [isFocused])
+
     return (
         <Container isTransparentStatusBar={true}>
             <Header _this={{navigation}} />
-            
         </Container>
     )
 }

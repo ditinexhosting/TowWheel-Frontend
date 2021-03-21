@@ -12,8 +12,7 @@ import { useTheme } from 'src/hooks'
 const Splash = ({ navigation }) => {
     const [Colors, styles] = useTheme(style)
     useEffect(() => {
-        setTimeout(()=>navigation.navigate('Login'),3000)
-        
+        setTimeout(()=>navigation.replace('Home'),2000)
     }, [])
     return (
         <Container style={styles.centerAll} isTransparentStatusBar={false}>

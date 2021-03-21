@@ -26,32 +26,12 @@ const auth = {
         }
         return handleResponse(response);
     },
-    checkUsername : async (username) => {
-        let response = null
-        try{
-            response = await API.get('/auth/check-username/'+username)
-        }
-        catch(e){
-            response = e
-        }
-        return handleResponse(response);
-    },
-    signUp : async (body,dp) => {
+    signUp : async (userData) => {
         let response = null
 		const data = new FormData();
 		try{
-            data.append('profile_picture', {
-                uri: dp.uri, name: 'photo.jpg', type: 'image/jpg'
-            });
-            
-            Object.keys(body).forEach(key => {
-                if(body[key])
-                    data.append(key, body[key]);
-            });
-
-            await API.post('/auth/signup', data,{
-                'Content-Type': 'multipart/form-data'
-            })
+        
+            await API.post('/auth/signup',userData)
             .then(function (res) {
                 response = res
             })

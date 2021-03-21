@@ -14,12 +14,15 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Screen from 'src/screens';
 import { Mixins, Spacing, Typography } from 'src/styles';
-import { useTheme, useLanguage } from 'src/hooks'
+import { useTheme, useLanguage, useDdux } from 'src/hooks'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CustomDrawerContent = ({ navigation, ...props }) => {
     const [Colors, styles] = useTheme(style)
     const language = useLanguage()
+    const Ddux = useDdux()
+    const user = Ddux.cache('user')
     return (
         <DrawerContentScrollView
             contentContainerStyle={{
@@ -27,20 +30,28 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
             }}
             {...props}
         >
-            <Header />
-            {/*<DrawerItemList 
+            <Header user={user} language={language} />
+            {user && 
+            <>
+            <DrawerItemList 
             activeTintColor={Colors.primary}
             activeBackgroundColor={Colors.secondary20}
             {...props} 
-            />*/}
-            <TouchableOpacity onPress={()=>{navigation.toggleDrawer();navigation.push('Login')}}>
+            />
+            <DrawerItem
+                label="Logout"
+                onPress={() => { Ddux.setCache('user',null); AsyncStorage.clear(); navigation.replace('Splash')}}
+            />
+            </>
+            }
+            {!user && <TouchableOpacity onPress={()=>{navigation.toggleDrawer();navigation.push('Login')}}>
             <View style={styles.button}>
                 <View style={styles.buttonIconWrapper}>
                     <Icon name='sign-in' color={Colors.white} size={Typography.FONT_SIZE_22} />
                 </View>
                 <Text style={styles.buttonText}>{language.t('sign_in')}</Text>
             </View>
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <View style={styles.seperator}></View>
             <DrawerItem
                 icon = {({ focused, color, size }) => <Icon color={color} size={size} name={'book'} />}
@@ -61,10 +72,8 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
     );
 }
 
-const Header = () => {
+const Header = ({user,language}) => {
     const [Colors, styles] = useTheme(style)
-    const language = useLanguage()
-
     const toggleLanguage = (locale)=>{
         language.changeLanguage(locale)
     }
@@ -73,10 +82,10 @@ const Header = () => {
         <View style={styles.header}>
             <View style={[styles.flex1,styles.justifyEnd,styles.paddingBottom10,styles.paddingLeft10]}>
                 <View style={styles.profilePicture}>
-                    <Text style={styles.profilePictureAltText}>G</Text>
+                    <Text style={styles.profilePictureAltText}>{(user && user.name)?user.name.charAt(0).toUpperCase():'G'}</Text>
                 </View>
-                <Text style={styles.name}>Guest User</Text>
-                <Text style={styles.number}>Please sign in.</Text>
+                <Text style={styles.name}>{(user && user.name)?user.name:'Guest User'}</Text>
+                <Text style={styles.number}>{(user && user.mobile)?'+'+user.mobile:'Please sign in.'}</Text>
             </View>
             <View style={styles.languageToggle}>
                 <TouchableOpacity onPress={()=>toggleLanguage('en')} style={[styles.marginBottom10]}>
@@ -108,7 +117,7 @@ const style = ({ Colors }) => (StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         borderRadius: 50,
-        backgroundColor: Colors.primary,
+        backgroundColor: Colors.primary_dark,
         flexDirection: 'row',
         padding: Spacing.SCALE_5
     },

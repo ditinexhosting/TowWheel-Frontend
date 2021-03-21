@@ -11,7 +11,7 @@ export const MOCK = null
 
 export const handleResponse = response => {
 	if(response.status !== 200){
-	console.log('API ERROR DEBUGGING ==> \n',response)
+	console.log('API ERROR DEBUGGING ==> \n',response.data)
 	}
 	if(response && response.response && response.response.status === 401){
 		return {

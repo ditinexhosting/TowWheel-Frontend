@@ -5,6 +5,7 @@ import {
   BackHandler
 } from 'react-native';
 import styles from './style'
+import Config from 'src/config'
 import { Container, Toast } from 'src/components'
 import { Mixins, Spacing, Typography } from 'src/styles'
 import API from 'src/services/api'
@@ -15,20 +16,29 @@ import Header from './header'
 const Login = ({ route, navigation }) => {
   const Ddux = useDdux()
   const [phone, setPhone] = useState('')
+  const [userDetails, setUserDetails] = useState({ name: '' })
   const [countryData, setCountryData] = useState(defaultCountryData)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [activeScreen, setActiveScreen] = useState(2)
+  const [activeScreen, setActiveScreen] = useState(1)
   const [otpValue, setOtpValue] = useState(['', '', '', ''])
   const inputRef = useRef([])
 
-  const getVerificationCode = () => {
+  const getVerificationCode = async () => {
     if (phone.length < 10)
       return Toast.show({ type: 'error', message: 'Invalid mobile number.' })
     Ddux.setData('loading', true)
     let mobileNumber = countryData.callingCode + phone
-    // TODO: Add Api here 
-    setActiveScreen(2)
+    /*
+     * API Send OTP
+     */
+    let response = await API.sendOtp(mobileNumber)
     Ddux.setData('loading', false)
+    console.log('OTP >>>> ', response.data.otp)
+    if (!response.status) {
+      return Toast.show({ type: 'error', message: response.error })
+    }
+    setActiveScreen(2)
+
   }
 
   const onOtpValueChange = (value, index) => {
@@ -39,14 +49,55 @@ const Login = ({ route, navigation }) => {
       inputRef.current[index + 1].focus()
   }
 
-  const onLogin = () => {
+  const onLogin = async () => {
     try {
       let otp = parseInt(otpValue.join(''))
       if (!Number.isInteger(otp) || otp < 1000)
         return Toast.show({ type: 'error', message: 'Please enter a valid Code.' })
+
       Ddux.setData('loading', true)
-      // TODO: Add Api here 
+      let mobileNumber = countryData.callingCode + phone
+      /*
+       * API Login
+       */
+      let response = await API.verifyOtp(mobileNumber, otp)
       Ddux.setData('loading', false)
+      if (!response.status) {
+        return Toast.show({ type: 'error', message: response.error })
+      }
+      if (response.data.isUserExists) {
+        response.data.token_expiry = new Date().getTime() + 45 * 60000;
+        Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
+        Ddux.setCache('user', response.data)
+        navigation.pop()
+      }
+      else {
+        setActiveScreen(3)
+      }
+    }
+    catch (e) {
+      console.error(e)
+    }
+  }
+
+  const onSignup = async () => {
+    try {
+      if (userDetails.name.length < 3)
+        return Toast.show({ type: 'error', message: 'Please enter a valid name.' })
+      Ddux.setData('loading', true)
+      let mobileNumber = countryData.callingCode + phone
+      /*
+       * API Signup
+       */
+      let response = await API.signUp({ ...userDetails, mobile: mobileNumber })
+      Ddux.setData('loading', false)
+      if (!response.status) {
+        return Toast.show({ type: 'error', message: response.error })
+      }
+      response.data.token_expiry = new Date().getTime() + 45 * 60000;
+      Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
+      Ddux.setCache('user', response.data)
+      navigation.pop()
     }
     catch (e) {
       console.error(e)
@@ -77,7 +128,7 @@ const Login = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, setCountryData, isModalVisible, setIsModalVisible, countryData, phone, setPhone, getVerificationCode, activeScreen, otpValue, inputRef, onOtpValueChange, onLogin }} />
+      <Body _this={{ navigation, setCountryData, isModalVisible, setIsModalVisible, countryData, phone, setPhone, getVerificationCode, activeScreen, otpValue, inputRef, onOtpValueChange, onLogin, userDetails, setUserDetails, onSignup }} />
     </Container>
   )
 }
