@@ -53,6 +53,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>App requires access to your sound.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>App requires access to your camera to allow you to take a photo to set as profile picture in the app.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>App requires access to your location to search for vehicles to book around you and notify for the same.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App requires access to your location to search for vehicles to book around you and notify for the same.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App requires access to your location to search for vehicles to book around you and notify for the same.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App requires access to your photo gallery to allow you to choose a photo to set as profile picture in the account.</string>
 	<key>UIAppFonts</key>
 	<array>
 	<string>AntDesign.ttf</string>

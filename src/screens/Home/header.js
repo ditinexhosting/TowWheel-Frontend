@@ -3,7 +3,8 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Image
+    Image,
+    TextInput
 } from 'react-native';
 import style from './style'
 import { Mixins } from 'src/styles'
@@ -15,12 +16,21 @@ const Header = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
     return (
         <View style={styles.header}>
-            <TouchableOpacity onPress={()=>_this.navigation.toggleDrawer()}>
+            <TouchableOpacity onPress={() => _this.navigation.toggleDrawer()}>
                 <Image
                     style={styles.hamburger}
                     source={hamburger}
                 />
             </TouchableOpacity>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchInput}
+                    onChangeText={(text) => null}
+                    value={''}
+                    placeholder="Destination Place ..."
+                    placeholderTextColor={Colors.muted_text}
+                />
+            </View>
         </View>
     )
 }
