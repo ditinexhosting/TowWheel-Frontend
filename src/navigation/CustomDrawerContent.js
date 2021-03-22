@@ -31,7 +31,7 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
             {...props}
         >
             <Header user={user} language={language} />
-            {user && 
+            {(user && Object.keys(user).length > 0) && 
             <>
             <DrawerItemList 
             activeTintColor={Colors.primary}
@@ -44,7 +44,7 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
             />
             </>
             }
-            {!user && <TouchableOpacity onPress={()=>{navigation.toggleDrawer();navigation.push('Login')}}>
+            {(!user || Object.keys(user).length == 0) && <TouchableOpacity onPress={()=>{navigation.toggleDrawer();navigation.push('Login')}}>
             <View style={styles.button}>
                 <View style={styles.buttonIconWrapper}>
                     <Icon name='sign-in' color={Colors.white} size={Typography.FONT_SIZE_22} />

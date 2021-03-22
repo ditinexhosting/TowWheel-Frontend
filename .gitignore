@@ -60,4 +60,4 @@ buck-out/
 
 # Env
 .env
-env.json
+env*.json
