@@ -17,15 +17,15 @@ const Body = ({ _this }) => {
         <View style={styles.flex1}>
             <MapView
                 style={styles.flex1}
-                //ref={_this.map}
+                ref={_this.map}
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
                 followsUserLocation={true}
                 onMapReady={() => null}
                 loadingEnabled={true}
                 initialRegion={{
-                    latitude: 31.766905,
-                    longitude: 35.215293,
+                    latitude: 31.767664,
+                    longitude: 35.216522,
                     latitudeDelta: 0.005,
                     longitudeDelta: 0.005,
                 }}

@@ -4,6 +4,10 @@ import {
 import { Mixins, Spacing, Typography } from 'src/styles'
 
 const styles = ({Colors})=>(StyleSheet.create({
+    fullHeightContainer:{
+        height: Mixins.DEVICE_HEIGHT - Mixins.STATUSBAR_HEIGHT,
+        flex: 0
+    },
     header:{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -34,11 +38,47 @@ const styles = ({Colors})=>(StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         justifyContent: 'center',
-        padding: Spacing.SCALE_10
+        paddingHorizontal: Spacing.SCALE_10
     },
     searchInput:{
         flex: 1,
-        fontSize: Typography.FONT_SIZE_18
+        fontSize: Typography.FONT_SIZE_18,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 0
+    },
+    modalView: {
+        width: '100%',
+        backgroundColor: Colors.background,
+        borderRadius: 5,
+        padding: Spacing.SCALE_15,
+        alignItems: 'center',
+        shadowColor: Colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    popupText:{
+        textAlign: 'center',
+        fontSize: Typography.FONT_SIZE_14,
+        color: Colors.primary
+    },
+    popupButton:{
+        backgroundColor: Colors.primary,
+        borderRadius: 10,
+        padding: Spacing.SCALE_10,
+        marginTop: Spacing.SCALE_10
+    },
+    popupButtonText:{
+        color: Colors.background,
+        fontSize: Typography.FONT_SIZE_16
     }
 })
 );
