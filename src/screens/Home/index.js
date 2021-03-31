@@ -16,6 +16,7 @@ import API from 'src/services/api'
 import Header from './header'
 import Body from './body'
 import Popup from './popup'
+import verifyLoginSession from './verifyLoginSession'
 import { useDdux, useTheme } from 'src/hooks'
 
 
@@ -29,10 +30,16 @@ const longitudeDelta = 0.005
 const Home = ({ navigation }) => {
     const isFocused = useIsFocused()
     const Ddux = useDdux()
+    const userDetails = Ddux.cache('user')
     const [Colors, styles] = useTheme(style)
     const [permissionPopup, setPermissionPopup] = useState(false)
+    const [destination, setDestination] = useState('')
     const currentLocation = Ddux.data('current_location')
     const map = useRef(null)
+
+    useEffect(()=>{
+        verifyLoginSession(userDetails,Ddux)
+    },[userDetails])
 
     useEffect(() => {
         if (isFocused) {
@@ -49,11 +56,10 @@ const Home = ({ navigation }) => {
 
     const requestLocationPremission = () => {
         try {
-            /*if (Config.isAndroid)
+            if (Config.isAndroid)
                 requestPermissionsAndroid()
             else
-                requestPermissionsIOS()*/
-            onLocationAvailable()
+                requestPermissionsIOS()
         }
         catch (e) {
             console.log(e)
@@ -134,8 +140,8 @@ const Home = ({ navigation }) => {
 
     return (
         <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
-            <Header _this={{ navigation }} />
-            <Body _this={{ map, currentLocation }} />
+            <Header _this={{ navigation, destination, setDestination }} />
+            <Body _this={{ map, currentLocation, navigation }} />
             <Popup _this={{ permissionPopup, setPermissionPopup, requestPermissionsAndroid, requestPermissionsIOS }} />
         </Container>
     )

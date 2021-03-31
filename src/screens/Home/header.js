@@ -25,8 +25,8 @@ const Header = ({ _this }) => {
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchInput}
-                    onChangeText={(text) => null}
-                    value={''}
+                    onChangeText={(text) => _this.setDestination(text)}
+                    value={_this.destination}
                     placeholder="Destination Place ..."
                     placeholderTextColor={Colors.muted_text}
                 />

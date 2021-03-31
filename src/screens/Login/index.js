@@ -104,27 +104,6 @@ const Login = ({ route, navigation }) => {
     }
   }
 
-  const handleSubmit = async () => {
-    /*Ddux.setData('loading', true)
-    if (phone.length<10)
-      return Toast.show({ type: 'error', message: 'Invalid mobile number.' })*/
-
-    /*
-     * API Login
-     */
-    /*let mobileNumber = country.slice(1)+phone
-    let response = await API.sendOtp(mobileNumber)
-    if (!response.status) {
-      Toast.show({ type: 'error', message: response.error })
-    }
-    else {
-      Ddux.setData('signup_session',{mobile: mobileNumber, country: countryCode})
-      navigation.replace('OtpVerification',{mobile: mobileNumber, country: countryCode})
-      console.log('OTP >>> ',response.data.otp)
-    }
-    Ddux.setData('loading', false)*/
-  }
-
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
