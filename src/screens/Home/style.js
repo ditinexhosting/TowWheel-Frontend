@@ -3,12 +3,12 @@ import {
 } from 'react-native';
 import { Mixins, Spacing, Typography } from 'src/styles'
 
-const styles = ({Colors})=>(StyleSheet.create({
-    fullHeightContainer:{
+const styles = ({ Colors }) => (StyleSheet.create({
+    fullHeightContainer: {
         height: Mixins.DEVICE_HEIGHT - Mixins.STATUSBAR_HEIGHT,
         flex: 0
     },
-    header:{
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         position: 'absolute',
@@ -17,13 +17,13 @@ const styles = ({Colors})=>(StyleSheet.create({
         left: 0,
         width: '100%'
     },
-    hamburger:{
+    hamburger: {
         width: Mixins.scaleSize(40),
         height: Mixins.scaleSize(40),
         resizeMode: 'contain',
         margin: Spacing.SCALE_10
     },
-    searchContainer:{
+    searchContainer: {
         flex: 1,
         backgroundColor: Colors.white,
         height: Mixins.scaleSize(40),
@@ -40,7 +40,7 @@ const styles = ({Colors})=>(StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: Spacing.SCALE_10
     },
-    searchInput:{
+    searchInput: {
         flex: 1,
         fontSize: Typography.FONT_SIZE_18,
     },
@@ -65,20 +65,32 @@ const styles = ({Colors})=>(StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
-    popupText:{
+    popupText: {
         textAlign: 'center',
         fontSize: Typography.FONT_SIZE_14,
         color: Colors.primary
     },
-    popupButton:{
+    popupButton: {
         backgroundColor: Colors.primary,
         borderRadius: 10,
         padding: Spacing.SCALE_10,
         marginTop: Spacing.SCALE_10
     },
-    popupButtonText:{
+    popupButtonText: {
         color: Colors.background,
         fontSize: Typography.FONT_SIZE_16
+    },
+    marker: {
+        //width: 20,
+        //height: 20,
+    },
+    markerImage: {
+        width: Mixins.scaleSize(30),
+        height: Mixins.scaleSize(30),
+        resizeMode: 'contain',
+        transform: [{
+            rotate: '270deg'
+        }]
     }
 })
 );

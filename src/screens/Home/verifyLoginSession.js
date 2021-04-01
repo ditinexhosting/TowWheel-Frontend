@@ -31,6 +31,7 @@ const VerifyLoginSession = async (userDetails,Ddux) => {
         }
         response.data.token_expiry = new Date().getTime() + 45 * 60000;
         Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
+        return Config.session
         
     }
     catch (e) {

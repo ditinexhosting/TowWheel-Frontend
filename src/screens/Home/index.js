@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
     View,
     Image,
@@ -24,8 +24,11 @@ var socket = null
 var watchId = null
 
 const RADIUS = 10000;
-const latitudeDelta = 0.005
-const longitudeDelta = 0.005
+const latitudeDelta = 0.0008
+const longitudeDelta = 0.0008
+
+var isInitialized =  false
+var isInitialTokenCheckCompleted = false
 
 const Home = ({ navigation }) => {
     const isFocused = useIsFocused()
@@ -34,6 +37,7 @@ const Home = ({ navigation }) => {
     const [Colors, styles] = useTheme(style)
     const [permissionPopup, setPermissionPopup] = useState(false)
     const [destination, setDestination] = useState('')
+    const [nearbyTows, setNearbyTows] = useState([])
     const currentLocation = Ddux.data('current_location')
     const map = useRef(null)
 
@@ -66,13 +70,29 @@ const Home = ({ navigation }) => {
         }
     }
 
+    const getNearestTows = async (location)=>{
+      /*
+       * API GetNearestTows
+       */
+      let response = await API.getNearestTows(location.latitude,location.longitude)
+      if (!response.status) {
+        return Toast.show({ type: 'error', message: response.error })
+      }
+      setNearbyTows(response.data)
+    }
+
     const onLocationAvailable = () => {
         watchId = Geolocation.watchPosition(
             pos => {
                 if (map.current){
-                    const currentLocation = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
-                    map.current.animateToRegion(currentLocation, 1000);
-                    Ddux.setData('current_location',currentLocation)
+                    //console.log('location changed >> ',pos)
+                    const currentGeoLocation = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
+                    Ddux.setData('current_location',currentGeoLocation)
+                    if(!isInitialized){
+                        isInitialized = true
+                        getNearestTows(currentGeoLocation)
+                        map.current.animateToRegion(currentGeoLocation, 1000);
+                    }
                 }
             },
             e => {
@@ -82,7 +102,8 @@ const Home = ({ navigation }) => {
                 enableHighAccuracy: true,
                 timeout: 20000,
                 maximumAge: 1000,
-                distanceFilter: RADIUS, //10KM
+                useSignificantChanges: true,
+                distanceFilter: 500, //500m
             }
         )
     }
@@ -100,7 +121,7 @@ const Home = ({ navigation }) => {
                 setPermissionPopup(true)
             else {
                 Geolocation.getCurrentPosition(
-                    info => { onLocationAvailable(info) },
+                info => { /*onLocationAvailable(info)*/ },
                     error => {
                         console.log('errroor ==>>', error)
                         setPermissionPopup(true)
@@ -126,7 +147,7 @@ const Home = ({ navigation }) => {
                 setPermissionPopup(true)
             else {
                 Geolocation.getCurrentPosition(
-                    info => { onLocationAvailable(info) },
+                info => { /*onLocationAvailable(info)*/ },
                     error => {
                         setPermissionPopup(true)
                     },
@@ -141,7 +162,7 @@ const Home = ({ navigation }) => {
     return (
         <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
             <Header _this={{ navigation, destination, setDestination }} />
-            <Body _this={{ map, currentLocation, navigation }} />
+            <Body _this={{ map, currentLocation, navigation, onLocationAvailable, nearbyTows }} />
             <Popup _this={{ permissionPopup, setPermissionPopup, requestPermissionsAndroid, requestPermissionsIOS }} />
         </Container>
     )
