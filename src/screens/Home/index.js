@@ -24,11 +24,10 @@ var socket = null
 var watchId = null
 
 const RADIUS = 10000;
-const latitudeDelta = 0.0008
-const longitudeDelta = 0.0008
+const latitudeDelta = 0.02
+const longitudeDelta = 0.02
 
 var isInitialized =  false
-var isInitialTokenCheckCompleted = false
 
 const Home = ({ navigation }) => {
     const isFocused = useIsFocused()
@@ -36,7 +35,6 @@ const Home = ({ navigation }) => {
     const userDetails = Ddux.cache('user')
     const [Colors, styles] = useTheme(style)
     const [permissionPopup, setPermissionPopup] = useState(false)
-    const [destination, setDestination] = useState('')
     const [nearbyTows, setNearbyTows] = useState([])
     const currentLocation = Ddux.data('current_location')
     const map = useRef(null)
@@ -79,6 +77,15 @@ const Home = ({ navigation }) => {
         return Toast.show({ type: 'error', message: response.error })
       }
       setNearbyTows(response.data)
+    }
+
+    const onDestinationSet = async (destination)=>{
+        if(userDetails){
+
+        }
+        else{
+            navigation.navigate('Login',{destination: destination})
+        }
     }
 
     const onLocationAvailable = () => {
@@ -161,7 +168,7 @@ const Home = ({ navigation }) => {
 
     return (
         <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
-            <Header _this={{ navigation, destination, setDestination }} />
+            <Header _this={{ navigation, onDestinationSet }} />
             <Body _this={{ map, currentLocation, navigation, onLocationAvailable, nearbyTows }} />
             <Popup _this={{ permissionPopup, setPermissionPopup, requestPermissionsAndroid, requestPermissionsIOS }} />
         </Container>

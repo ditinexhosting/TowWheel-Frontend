@@ -14,6 +14,7 @@ import Body from './body'
 import Header from './header'
 
 const Login = ({ route, navigation }) => {
+  const { destination = null } = route.params
   const Ddux = useDdux()
   const [phone, setPhone] = useState('')
   const [userDetails, setUserDetails] = useState({ name: '' })
@@ -69,7 +70,10 @@ const Login = ({ route, navigation }) => {
         response.data.token_expiry = new Date().getTime() + 45 * 60000;
         Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
         Ddux.setCache('user', response.data)
-        navigation.pop()
+        if (destination)
+          navigation.replace('Home_Booking', { destination: destination })
+        else
+          navigation.pop()
       }
       else {
         setActiveScreen(3)
@@ -97,7 +101,10 @@ const Login = ({ route, navigation }) => {
       response.data.token_expiry = new Date().getTime() + 45 * 60000;
       Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
       Ddux.setCache('user', response.data)
-      navigation.pop()
+      if (destination)
+        navigation.replace('Home_Booking', { destination: destination })
+      else
+        navigation.pop()
     }
     catch (e) {
       console.error(e)

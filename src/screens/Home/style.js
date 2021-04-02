@@ -44,6 +44,10 @@ const styles = ({ Colors }) => (StyleSheet.create({
         flex: 1,
         fontSize: Typography.FONT_SIZE_18,
     },
+    searchResultContainer: {
+        width: Mixins.scaleSize(280),
+        marginLeft: Spacing.SCALE_10
+    },
     modalContainer: {
         flex: 1,
         justifyContent: 'center',

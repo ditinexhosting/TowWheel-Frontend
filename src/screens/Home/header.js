@@ -9,6 +9,8 @@ import {
 import style from './style'
 import { Mixins } from 'src/styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Config from 'src/config'
 import { useTheme } from 'src/hooks'
 import { hamburger } from 'src/assets'
 
@@ -22,15 +24,25 @@ const Header = ({ _this }) => {
                     source={hamburger}
                 />
             </TouchableOpacity>
-            <View style={styles.searchContainer}>
-                <TextInput
-                    style={styles.searchInput}
-                    onChangeText={(text) => _this.setDestination(text)}
-                    value={_this.destination}
-                    placeholder="Destination Place ..."
-                    placeholderTextColor={Colors.muted_text}
-                />
-            </View>
+            <GooglePlacesAutocomplete
+                fetchDetails={true}
+                minLength={4}
+                enablePoweredByContainer={false}
+                enableHighAccuracyLocation={true}
+                styles={{
+                    textInputContainer: styles.searchContainer,
+                    textInput: styles.searchInput,
+                    row: styles.searchResultContainer
+                }}
+                placeholder='Destination Place ...'
+                onPress={(data, details = null) => {
+                    _this.onDestinationSet({name: details.name, address: details.formatted_address, location: details.geometry.location});
+                }}
+                query={{
+                    key: 'AIzaSyAZ5aP7UHDT0ToVbEyKpSzu_fIaaMTn9_k',
+                    language: 'en',
+                }}
+            />
         </View>
     )
 }
