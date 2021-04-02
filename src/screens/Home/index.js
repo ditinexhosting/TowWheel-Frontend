@@ -81,7 +81,7 @@ const Home = ({ navigation }) => {
 
     const onDestinationSet = async (destination)=>{
         if(userDetails){
-
+            navigation.navigate('Home_Booking',{destination: destination})
         }
         else{
             navigation.navigate('Login',{destination: destination})
