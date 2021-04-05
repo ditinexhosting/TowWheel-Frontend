@@ -36,7 +36,12 @@ const Home = ({ navigation }) => {
     const [Colors, styles] = useTheme(style)
     const [permissionPopup, setPermissionPopup] = useState(false)
     const [nearbyTows, setNearbyTows] = useState([])
-    const currentLocation = Ddux.data('current_location')
+    const [currentLocation, setCurrentLocation] = useState({
+        latitude: 31.767664,
+        longitude: 35.216522,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+    }) 
     const map = useRef(null)
 
     useEffect(()=>{
@@ -81,10 +86,10 @@ const Home = ({ navigation }) => {
 
     const onDestinationSet = async (destination)=>{
         if(userDetails){
-            navigation.navigate('Home_Booking',{destination: destination})
+            navigation.navigate('Home_Booking',{destination: destination, source: currentLocation})
         }
         else{
-            navigation.navigate('Login',{destination: destination})
+            navigation.navigate('Login',{destination: destination, source: currentLocation})
         }
     }
 
@@ -92,9 +97,8 @@ const Home = ({ navigation }) => {
         watchId = Geolocation.watchPosition(
             pos => {
                 if (map.current){
-                    //console.log('location changed >> ',pos)
                     const currentGeoLocation = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
-                    Ddux.setData('current_location',currentGeoLocation)
+                    setCurrentLocation(currentGeoLocation)
                     if(!isInitialized){
                         isInitialized = true
                         getNearestTows(currentGeoLocation)

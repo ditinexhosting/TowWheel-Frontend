@@ -15,7 +15,7 @@ const Header = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
     return (
         <HeaderBar navigation={_this.navigation} >
-            
+            <Text style={styles.title}> Tow Booking </Text>
         </HeaderBar>
     )
 }

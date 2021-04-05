@@ -14,13 +14,17 @@ import Body from './body'
 import Header from './header'
 
 const Booking = ({ route, navigation }) => {
-  const { destination = null } = route.params
+  const { destination = null, source = null } = route.params
   const Ddux = useDdux()
+  const userDetails = Ddux.cache('user')
+  const currentLocation = source
+  const map = useRef(null)
+  const [distanceTime, setDistanceTime] = useState({distance: null, duration: null})
 
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation }} />
+      <Body _this={{ navigation, destination, map, currentLocation, setDistanceTime }} />
     </Container>
   )
 }

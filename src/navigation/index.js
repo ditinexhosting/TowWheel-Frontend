@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 const Router = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Map"
+      <Stack.Navigator initialRouteName="Home"
         mode="modal"
         headerMode="none"
       >
