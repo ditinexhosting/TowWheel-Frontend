@@ -13,7 +13,7 @@ import { GOOGLE_MAP_API_KEY } from 'src/config'
 import Icon from 'react-native-vector-icons/Ionicons';
 import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion, Callout } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions'
-import { tow_bike, tow_truck, tow_private } from 'src/assets'
+import BottomPopup from './bottomPopup'
 
 const Body = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
@@ -53,7 +53,7 @@ const Body = ({ _this }) => {
                 <MapViewDirections
                     origin={{ latitude: _this.currentLocation.latitude, longitude: _this.currentLocation.longitude }}
                     destination={{ latitude: _this.destination.location.lat, longitude: _this.destination.location.lng }}
-                    apikey={GOOGLE_MAP_API_KEY} //'AIzaSyBKrN8DqBl6I_3Y5vl0R77nuBEZEoXsK1U'
+                    apikey={GOOGLE_MAP_API_KEY} 
                     strokeWidth={4}
                     strokeColor={Colors.primary}
                     optimizeWaypoints={false}
@@ -62,6 +62,7 @@ const Body = ({ _this }) => {
                     }}
                 />
             </MapView>
+            <BottomPopup _this={_this} />
         </View>
     )
 }
