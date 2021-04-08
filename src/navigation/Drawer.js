@@ -14,14 +14,16 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Screen from 'src/screens';
 import { Mixins } from 'src/styles';
-import { useTheme } from 'src/hooks'
+import { useTheme, useDdux } from 'src/hooks'
 import CustomDrawerContent from './CustomDrawerContent'
 
 const Drawer = createDrawerNavigator();
 
 const Dashboard = () => {
     const [Colors, styles] = useTheme(style)
-    return (
+    const Ddux = useDdux()
+    const userDetails = Ddux.cache('user')
+    return userDetails!==null ? (
         <>
         <View style={[styles.statusBar, { height: Mixins.STATUSBAR_HEIGHT }]}>
         </View>
@@ -30,11 +32,11 @@ const Dashboard = () => {
             drawerStyle={{backgroundColor: Colors.background}}
             drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
-            <Drawer.Screen name="Home" component={Screen.Home} />
+            <Drawer.Screen name="Home" component={userDetails && userDetails.is_driver ? Screen.Home_Driver : Screen.Home} />
             <Drawer.Screen name="Notifications" component={Screen.Home} />
         </Drawer.Navigator>
         </>
-    );
+    ): null;
 }
 
 const style = ({Colors})=>(StyleSheet.create({

@@ -14,7 +14,7 @@ import Body from './body'
 import Header from './header'
 
 const Login = ({ route, navigation }) => {
-  const { destination = null } = route.params
+  const { destination = null, source = null } = route.params || {}
   const Ddux = useDdux()
   const [phone, setPhone] = useState('')
   const [userDetails, setUserDetails] = useState({ name: '' })
@@ -71,7 +71,7 @@ const Login = ({ route, navigation }) => {
         Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
         Ddux.setCache('user', response.data)
         if (destination)
-          navigation.replace('Home_Booking', { destination: destination })
+          navigation.replace('Home_Booking', { destination: destination, source: source })
         else
           navigation.pop()
       }
@@ -102,7 +102,7 @@ const Login = ({ route, navigation }) => {
       Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
       Ddux.setCache('user', response.data)
       if (destination)
-        navigation.replace('Home_Booking', { destination: destination })
+        navigation.replace('Home_Booking', { destination: destination, source: source })
       else
         navigation.pop()
     }

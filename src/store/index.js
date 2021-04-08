@@ -14,5 +14,5 @@ export const initialState = {
 export const initialCache = {
     user: {},
     mobile: '',
-    ride: {}
+    ride: null
 }

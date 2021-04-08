@@ -14,7 +14,7 @@ import { Container, Toast } from 'src/components'
 var isInitialTokenCheckCompleted = false
 
 const VerifyLoginSession = async (userDetails,Ddux) => {
-    if(!userDetails || Object.keys(userDetails).length == 0 || isInitialTokenCheckCompleted)
+    if(!userDetails || isInitialTokenCheckCompleted)
         return
     try {
         /*
@@ -26,7 +26,7 @@ const VerifyLoginSession = async (userDetails,Ddux) => {
         }
         isInitialTokenCheckCompleted = true
         if(!response.data.isUserExists){
-            Ddux.setCache('user',{})
+            Ddux.setCache('user',null)
             return false
         }
         response.data.token_expiry = new Date().getTime() + 45 * 60000;

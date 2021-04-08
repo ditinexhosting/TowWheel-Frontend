@@ -36,11 +36,12 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
             <DrawerItemList 
             activeTintColor={Colors.primary}
             activeBackgroundColor={Colors.secondary20}
+            navigation={navigation}
             {...props} 
             />
             <DrawerItem
                 label="Logout"
-                onPress={() => { Ddux.setCache('user',null); AsyncStorage.clear(); navigation.replace('Splash')}}
+                onPress={() => { Ddux.clear(); navigation.replace('Splash')}}
             />
             </>
             }

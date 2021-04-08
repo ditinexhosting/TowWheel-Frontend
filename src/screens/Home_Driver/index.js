@@ -70,10 +70,6 @@ const Home = ({ navigation }) => {
         })
     }, [isFocused]);
 
-    useEffect(() => {
-        verifyLoginSession(userDetails, Ddux)
-    }, [userDetails])
-
     const requestLocationPermission = () => {
         try {
             if (Config.isAndroid)
