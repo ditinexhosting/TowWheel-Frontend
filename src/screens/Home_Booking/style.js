@@ -61,7 +61,8 @@ const style = ({ Colors }) => (StyleSheet.create({
     },
     location:{
         fontSize: Typography.FONT_SIZE_14,
-        color: Colors.black
+        color: Colors.black,
+        marginRight: Spacing.SCALE_10
     },
     continueButton:{
         backgroundColor: Colors.black,
@@ -84,6 +85,11 @@ const style = ({ Colors }) => (StyleSheet.create({
         color: Colors.white,
         flex: 1,
         textAlign: 'center'
+    },
+    avatarGif:{
+        resizeMode: 'contain',
+        width: Mixins.scaleSize(150),
+        height: Mixins.scaleSize(150)
     }
 })
 );

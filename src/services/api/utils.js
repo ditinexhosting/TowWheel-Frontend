@@ -59,6 +59,7 @@ export const getToken = async ()=>{
 		//call refresh token and update client token
 		await API.get('/auth/refresh-token/'+session.mobile+'/'+session.active_session_refresh_token)
         .then(async function (res) {
+			console.log(res)
 			session.access_token = res.data.access_token
 			session.token_expiry = new Date().getTime() + 45 * 60000;
 			Config.session = session
@@ -68,7 +69,6 @@ export const getToken = async ()=>{
 			 console.log('error',error)
         })
 	}
-	
 	return response
 }
 

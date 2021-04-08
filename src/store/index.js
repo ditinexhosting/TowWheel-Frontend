@@ -13,8 +13,6 @@ export const initialState = {
 
 export const initialCache = {
     user: {},
-    introductions: [],
-    recentlyActive: [],
     mobile: '',
-    peoples: []
+    ride: {}
 }

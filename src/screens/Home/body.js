@@ -22,7 +22,7 @@ const Body = ({ _this }) => {
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
                 followsUserLocation={true}
-                onMapReady={() => _this.onLocationAvailable()}
+                onMapReady={() => _this.requestLocationPermission()}
                 loadingEnabled={true}
                 showsCompass={false}
                 //onUserLocationChange={_this.onUserLocationChange}

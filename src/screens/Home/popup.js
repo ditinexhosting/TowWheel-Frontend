@@ -28,7 +28,7 @@ const Popup = ({ _this }) => {
                     <TouchableOpacity onPress={() => {
                         _this.setPermissionPopup(false)
                         setTimeout(()=>{
-                        Config.isAndroid ? _this.requestPermissionsAndroid() : _this.requestPermissionsIOS()
+                        _this.requestLocationPermission()
                         },800)
                         }} style={styles.popupButton}>
                         <Text style={styles.popupButtonText}>Allow Permissions</Text>

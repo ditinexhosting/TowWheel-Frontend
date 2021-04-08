@@ -27,11 +27,11 @@ const VerifyLoginSession = async (userDetails,Ddux) => {
         isInitialTokenCheckCompleted = true
         if(!response.data.isUserExists){
             Ddux.setCache('user',null)
-            return 
+            return false
         }
         response.data.token_expiry = new Date().getTime() + 45 * 60000;
         Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
-        return Config.session
+        return true
         
     }
     catch (e) {
