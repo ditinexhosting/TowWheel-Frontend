@@ -40,7 +40,7 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
             />
             <DrawerItem
                 label="Logout"
-                onPress={() => { /*Ddux.clear();*/ navigation.replace('Splash')}}
+                onPress={() => { Ddux.clear(); setTimeout(()=>navigation.replace('Splash'),500) }}
             />
             </>
             }

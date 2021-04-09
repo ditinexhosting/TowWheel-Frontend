@@ -3,6 +3,7 @@ import { handleResponse, API, MOCK, getToken } from './utils';
 const driver = {
     getNearestRideRequest: async (latitude, longitude) => {
         let response = null
+        const token = await getToken()
         try {
             response = await API.get(`/driver/get-nearest-ride-request`,
                 {
@@ -10,7 +11,7 @@ const driver = {
                         latitude: latitude,
                         longitude: longitude
                     },
-                    //'headers': { 'Authorization': 'Bearer: ' + token }
+                    'headers': { 'Authorization': 'Bearer: ' + token }
                 }
             )
         }

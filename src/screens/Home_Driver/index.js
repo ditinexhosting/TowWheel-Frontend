@@ -43,10 +43,11 @@ const Home = ({ navigation }) => {
         longitudeDelta: 0.02,
     })
     const map = useRef(null)
+    
 
 
     useEffect(() => {
-        if (isFocused && isInitialized) {
+        /*if (isFocused && isInitialized) {
             Geolocation.getCurrentPosition(
                 pos => {
                     if (map.current) {
@@ -65,7 +66,7 @@ const Home = ({ navigation }) => {
         return (() => {
             if (watchId)
                 Geolocation.clearWatch(watchId);
-        })
+        })*/
     }, [isFocused]);
 
     const requestLocationPermission = () => {
@@ -89,7 +90,7 @@ const Home = ({ navigation }) => {
             return Toast.show({ type: 'error', message: response.error })
         }
         console.log(response.data)
-        setNearbyTows(response.data)
+        //setNearbyTows(response.data)
     }
 
     const onLocationAvailable = (info=null) => {
@@ -108,7 +109,6 @@ const Home = ({ navigation }) => {
                     setCurrentLocation(currentGeoLocation)
                     if (!isInitialized) {
                         isInitialized = true
-                        getNearestTows(currentGeoLocation)
                         map.current.animateToRegion(currentGeoLocation, 1000);
                     }
                 }
@@ -164,7 +164,6 @@ const Home = ({ navigation }) => {
             if (!granted)
                 setPermissionPopup(true)
             else {
-                onLocationAvailable()
                 Geolocation.getCurrentPosition(
                     info => { onLocationAvailable(info) },
                     error => {

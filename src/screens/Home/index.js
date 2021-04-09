@@ -94,7 +94,7 @@ const Home = ({ navigation }) => {
     }
 
     const onDestinationSet = async (destination) => {
-        if (userDetails) {
+        if (userDetails && Object.keys(userDetails).length !== 0) {
             navigation.navigate('Home_Booking', { destination: destination, source: currentLocation })
         }
         else {

@@ -6,7 +6,8 @@ import { Mixins, Spacing, Typography } from 'src/styles'
 const styles = ({ Colors }) => (StyleSheet.create({
     fullHeightContainer: {
         height: Mixins.DEVICE_HEIGHT,
-        flex: 0
+        flex: 0,
+        backgroundColor: Colors.black
     },
     header: {
         flexDirection: 'row',
@@ -25,7 +26,10 @@ const styles = ({ Colors }) => (StyleSheet.create({
     },
     map:{
         width: '100%',
-        height: Mixins.scaleSize(200)
+        alignSelf: 'center',
+        borderRadius: 20,
+        height: Mixins.scaleSize(200),
+        overflow: 'hidden'
     },
     modalContainer: {
         flex: 1,
@@ -75,6 +79,12 @@ const styles = ({ Colors }) => (StyleSheet.create({
             rotate: '270deg'
         }]
     },
+    content:{
+        backgroundColor: Colors.background,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        marginTop: Spacing.SCALE_10
+    },
     popupTitle: {
         fontSize: Typography.FONT_SIZE_15,
         color: Colors.text,
@@ -85,7 +95,7 @@ const styles = ({ Colors }) => (StyleSheet.create({
         resizeMode: 'contain',
         width: Mixins.scaleSize(150),
         height: Mixins.scaleSize(150)
-    }
+    },
 })
 );
 

@@ -15,30 +15,32 @@ import { avatarGif } from 'src/assets'
 const Body = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
     return (
-        <View style={styles.flex1}>
-            <MapView
-                style={styles.map}
-                ref={_this.map}
-                provider={PROVIDER_GOOGLE}
-                showsUserLocation={true}
-                followsUserLocation={true}
-                onMapReady={() => _this.requestLocationPermission()}
-                loadingEnabled={true}
-                showsCompass={false}
-                //onUserLocationChange={_this.onUserLocationChange}
-                rotateEnabled={false}
-                //showsMyLocationButton={true}
-                initialRegion={_this.currentLocation}
-            >
-                {
-                    _this.nearbyTows.map(item => <MarkerRender key={item._id} item={item} />)
-                }
-            </MapView>
-            <View style={[styles.flex1,styles.centerAll]}>
+        <>
+            <View style={styles.map}>
+                <MapView
+                    style={styles.flex1}
+                    ref={_this.map}
+                    provider={PROVIDER_GOOGLE}
+                    showsUserLocation={true}
+                    followsUserLocation={true}
+                    onMapReady={() => _this.requestLocationPermission()}
+                    loadingEnabled={true}
+                    showsCompass={false}
+                    //onUserLocationChange={_this.onUserLocationChange}
+                    rotateEnabled={false}
+                    //showsMyLocationButton={true}
+                    initialRegion={_this.currentLocation}
+                >
+                    {
+                        _this.nearbyTows.map(item => <MarkerRender key={item._id} item={item} />)
+                    }
+                </MapView>
+            </View>
+            <View style={[styles.flex1, styles.centerAll, styles.content]}>
                 <Image source={avatarGif} style={styles.avatarGif} />
                 <Text style={styles.popupTitle}>Waiting for ride request ..... </Text>
             </View>
-        </View>
+        </>
     )
 }
 
