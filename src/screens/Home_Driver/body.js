@@ -10,14 +10,14 @@ import { Mixins } from 'src/styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'src/hooks'
 import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion, Callout } from 'react-native-maps';
-import { tow_bike, tow_truck, tow_private } from 'src/assets'
+import { avatarGif } from 'src/assets'
 
 const Body = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
     return (
         <View style={styles.flex1}>
             <MapView
-                style={styles.flex1}
+                style={styles.map}
                 ref={_this.map}
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
@@ -27,13 +27,17 @@ const Body = ({ _this }) => {
                 showsCompass={false}
                 //onUserLocationChange={_this.onUserLocationChange}
                 rotateEnabled={false}
-                showsMyLocationButton={true}
+                //showsMyLocationButton={true}
                 initialRegion={_this.currentLocation}
             >
                 {
                     _this.nearbyTows.map(item => <MarkerRender key={item._id} item={item} />)
                 }
             </MapView>
+            <View style={[styles.flex1,styles.centerAll]}>
+                <Image source={avatarGif} style={styles.avatarGif} />
+                <Text style={styles.popupTitle}>Waiting for ride request ..... </Text>
+            </View>
         </View>
     )
 }

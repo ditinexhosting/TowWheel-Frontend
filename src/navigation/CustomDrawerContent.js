@@ -16,7 +16,6 @@ import * as Screen from 'src/screens';
 import { Mixins, Spacing, Typography } from 'src/styles';
 import { useTheme, useLanguage, useDdux } from 'src/hooks'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CustomDrawerContent = ({ navigation, ...props }) => {
     const [Colors, styles] = useTheme(style)
@@ -41,7 +40,7 @@ const CustomDrawerContent = ({ navigation, ...props }) => {
             />
             <DrawerItem
                 label="Logout"
-                onPress={() => { Ddux.clear(); navigation.replace('Splash')}}
+                onPress={() => { /*Ddux.clear();*/ navigation.replace('Splash')}}
             />
             </>
             }

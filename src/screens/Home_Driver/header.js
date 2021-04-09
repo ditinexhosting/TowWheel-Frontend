@@ -24,14 +24,6 @@ const Header = ({ _this }) => {
                     source={hamburger}
                 />
             </TouchableOpacity>
-            {
-                _this.rideDetails && <TouchableOpacity onPress={()=>_this.navigation.navigate('Home_Booking', { destination: _this.rideDetails.destination, source: _this.rideDetails.source })} style={[styles.flexRow, styles.continueButton]}>
-                <Text style={styles.continueButtonText}>In-progress Booking</Text>
-                <View style={styles.continueButtonIcon}>
-                    <Icon name='ios-arrow-forward-sharp' size={Typography.FONT_SIZE_25} color={Colors.primary} />
-                </View>
-            </TouchableOpacity>
-            }
         </View>
     )
 }

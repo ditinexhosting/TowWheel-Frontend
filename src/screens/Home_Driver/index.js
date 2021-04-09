@@ -16,7 +16,6 @@ import API from 'src/services/api'
 import Header from './header'
 import Body from './body'
 import Popup from './popup'
-import verifyLoginSession from './verifyLoginSession'
 import { useDdux, useTheme } from 'src/hooks'
 import Geocoder from 'react-native-geocoding';
 Geocoder.init(GOOGLE_MAP_API_KEY);
@@ -34,7 +33,6 @@ const Home = ({ navigation }) => {
     const isFocused = useIsFocused()
     const Ddux = useDdux()
     const userDetails = Ddux.cache('user')
-    const rideDetails = Ddux.cache('ride')
     const [Colors, styles] = useTheme(style)
     const [permissionPopup, setPermissionPopup] = useState(false)
     const [nearbyTows, setNearbyTows] = useState([])
@@ -48,7 +46,7 @@ const Home = ({ navigation }) => {
 
 
     useEffect(() => {
-        if (isFocused) {
+        if (isFocused && isInitialized) {
             Geolocation.getCurrentPosition(
                 pos => {
                     if (map.current) {
@@ -86,20 +84,12 @@ const Home = ({ navigation }) => {
         /*
          * API GetNearestTows
          */
-        let response = await API.getNearestTows(location.latitude, location.longitude)
+        let response = await API.getNearestRideRequest(location.latitude, location.longitude)
         if (!response.status) {
             return Toast.show({ type: 'error', message: response.error })
         }
+        console.log(response.data)
         setNearbyTows(response.data)
-    }
-
-    const onDestinationSet = async (destination) => {
-        if (userDetails) {
-            navigation.navigate('Home_Booking', { destination: destination, source: currentLocation })
-        }
-        else {
-            navigation.navigate('Login', { destination: destination, source: currentLocation })
-        }
     }
 
     const onLocationAvailable = (info=null) => {
@@ -190,7 +180,7 @@ const Home = ({ navigation }) => {
 
     return (
         <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
-            <Header _this={{ navigation, onDestinationSet, rideDetails }} />
+            <Header _this={{ navigation }} />
             <Body _this={{ map, currentLocation, navigation, requestLocationPermission, nearbyTows }} />
             <Popup _this={{ permissionPopup, setPermissionPopup, requestLocationPermission }} />
         </Container>

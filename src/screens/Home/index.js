@@ -16,7 +16,6 @@ import API from 'src/services/api'
 import Header from './header'
 import Body from './body'
 import Popup from './popup'
-import verifyLoginSession from './verifyLoginSession'
 import { useDdux, useTheme } from 'src/hooks'
 import Geocoder from 'react-native-geocoding';
 Geocoder.init(GOOGLE_MAP_API_KEY);
@@ -48,7 +47,7 @@ const Home = ({ navigation }) => {
 
 
     useEffect(() => {
-        if (isFocused) {
+        if (isFocused && isInitialized) {
             Geolocation.getCurrentPosition(
                 pos => {
                     if (map.current) {
@@ -70,9 +69,6 @@ const Home = ({ navigation }) => {
         })
     }, [isFocused]);
 
-    useEffect(() => {
-        verifyLoginSession(userDetails, Ddux)
-    }, [userDetails])
 
     const requestLocationPermission = () => {
         try {

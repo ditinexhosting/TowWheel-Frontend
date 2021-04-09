@@ -23,7 +23,7 @@ const Dashboard = () => {
     const [Colors, styles] = useTheme(style)
     const Ddux = useDdux()
     const userDetails = Ddux.cache('user')
-    return userDetails!==null ? (
+    return (
         <>
         <View style={[styles.statusBar, { height: Mixins.STATUSBAR_HEIGHT }]}>
         </View>
@@ -36,7 +36,7 @@ const Dashboard = () => {
             <Drawer.Screen name="Notifications" component={Screen.Home} />
         </Drawer.Navigator>
         </>
-    ): null;
+    );
 }
 
 const style = ({Colors})=>(StyleSheet.create({
