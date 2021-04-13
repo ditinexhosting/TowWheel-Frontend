@@ -20,14 +20,11 @@ import { useDdux, useTheme } from 'src/hooks'
 import Geocoder from 'react-native-geocoding';
 Geocoder.init(GOOGLE_MAP_API_KEY);
 
-
 var watchId = null
 
 const RADIUS = 10000;
 const latitudeDelta = 0.02
 const longitudeDelta = 0.02
-
-var isInitialized = false
 
 const Home = ({ navigation }) => {
     const isFocused = useIsFocused()
@@ -36,6 +33,8 @@ const Home = ({ navigation }) => {
     const rideDetails = Ddux.cache('ride')
     const [Colors, styles] = useTheme(style)
     const [permissionPopup, setPermissionPopup] = useState(false)
+    const [isMapLoaded, setIsMapLoaded] = useState(false)
+    const [intervalState, setIntervalState] = useState(1)
     const [nearbyTows, setNearbyTows] = useState([])
     const [currentLocation, setCurrentLocation] = useState({
         latitude: 31.767664,
@@ -47,26 +46,29 @@ const Home = ({ navigation }) => {
 
 
     useEffect(() => {
-        if (isFocused && isInitialized) {
-            Geolocation.getCurrentPosition(
-                pos => {
-                    if (map.current) {
-                        const currentGeoLocation = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
-                        setCurrentLocation(currentGeoLocation)
-                        map.current.animateToRegion(currentGeoLocation, 1000);
-                        getNearestTows(currentGeoLocation)
-                    }
-                },
-                error => {
-                    console.log('request permission ==>>', error)
-                }
-            )
+        if (isFocused && isMapLoaded) {
+            requestLocationPermission()
         }
 
-        return (() => {
+        if (!isFocused) {
             if (watchId)
                 Geolocation.clearWatch(watchId);
-        })
+        }
+    }, [isFocused, isMapLoaded]);
+
+    useEffect(() => {
+        if (intervalState > 1)
+            getNearestTows()
+    }, [intervalState]);
+
+    useEffect(() => {
+        if (isFocused){
+            const interval = setInterval(() => {
+                setIntervalState(prev => prev + 1)
+            }, 60000);
+        }
+        if (!isFocused)
+            clearInterval(interval);
     }, [isFocused]);
 
 
@@ -82,10 +84,11 @@ const Home = ({ navigation }) => {
         }
     }
 
-    const getNearestTows = async (location) => {
+    const getNearestTows = async (currentGeoLocation = null) => {
         /*
          * API GetNearestTows
          */
+        const location = currentGeoLocation ? currentGeoLocation : currentLocation
         let response = await API.getNearestTows(location.latitude, location.longitude)
         if (!response.status) {
             return Toast.show({ type: 'error', message: response.error })
@@ -102,12 +105,11 @@ const Home = ({ navigation }) => {
         }
     }
 
-    const onLocationAvailable = (info=null) => {
-        if(info){
+    const onLocationAvailable = (info = null) => {
+        if (info) {
             const currentGeoLocation = { latitude: info.coords.latitude, longitude: info.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
-                        setCurrentLocation(currentGeoLocation)
-                        map.current.animateToRegion(currentGeoLocation, 1000);
-                        getNearestTows(currentGeoLocation)
+            setCurrentLocation(currentGeoLocation)
+            map.current.animateToRegion(currentGeoLocation, 1000);
         }
         if (watchId)
             Geolocation.clearWatch(watchId);
@@ -116,11 +118,7 @@ const Home = ({ navigation }) => {
                 if (map.current) {
                     const currentGeoLocation = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
                     setCurrentLocation(currentGeoLocation)
-                    if (!isInitialized) {
-                        isInitialized = true
-                        getNearestTows(currentGeoLocation)
-                        map.current.animateToRegion(currentGeoLocation, 1000);
-                    }
+                    getNearestTows(currentGeoLocation)
                 }
             },
             e => {
@@ -130,8 +128,8 @@ const Home = ({ navigation }) => {
                 enableHighAccuracy: true,
                 timeout: 20000,
                 maximumAge: 1000,
-                useSignificantChanges: true,
-                distanceFilter: 500, //500m
+                //useSignificantChanges: true,
+                //distanceFilter: 500, //500m
             }
         )
     }
@@ -191,7 +189,7 @@ const Home = ({ navigation }) => {
     return (
         <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
             <Header _this={{ navigation, onDestinationSet, rideDetails }} />
-            <Body _this={{ map, currentLocation, navigation, requestLocationPermission, nearbyTows }} />
+            <Body _this={{ map, currentLocation, navigation, nearbyTows, setIsMapLoaded }} />
             <Popup _this={{ permissionPopup, setPermissionPopup, requestLocationPermission }} />
         </Container>
     )
