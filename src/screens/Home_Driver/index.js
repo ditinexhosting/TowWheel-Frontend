@@ -20,14 +20,13 @@ import { useDdux, useTheme } from 'src/hooks'
 import Geocoder from 'react-native-geocoding';
 Geocoder.init(GOOGLE_MAP_API_KEY);
 
-
+var socket = null
 var watchId = null
 
 const RADIUS = 10000;
 const latitudeDelta = 0.02
 const longitudeDelta = 0.02
 
-var isInitialized = false
 
 const Home = ({ navigation }) => {
     const isFocused = useIsFocused()
@@ -35,7 +34,9 @@ const Home = ({ navigation }) => {
     const userDetails = Ddux.cache('user')
     const [Colors, styles] = useTheme(style)
     const [permissionPopup, setPermissionPopup] = useState(false)
-    const [nearbyTows, setNearbyTows] = useState([])
+    const [rideRequests, setRideRequests] = useState([])
+    const [selectedRideRequest, setSelectedRideRequest] = useState(null)
+    const [isMapLoaded, setIsMapLoaded] = useState(false)
     const [currentLocation, setCurrentLocation] = useState({
         latitude: 31.767664,
         longitude: 35.216522,
@@ -43,31 +44,68 @@ const Home = ({ navigation }) => {
         longitudeDelta: 0.02,
     })
     const map = useRef(null)
-    
+
+    /*
+     * Socket Handler
+     */
+    const socketHandler = async () => {
+        socket = await API.SOCKET('/driver-ride-request')
+        socket.on('connect', () => {
+            socket.emit('initialize', { _id: userDetails.driver_details, location: currentLocation })
+        });
+        socket.on('initial_ride_requests', (data) => {
+            setRideRequests(prev => data)
+        })
+        socket.on('disconnect', () => {
+
+        });
+    }
+
+    const processTowRequest = async () => {
+        if (selectedRideRequest.available_drivers.includes(userDetails.driver_details)) {
+            socket.emit('decline_tow_request', { ride_id: selectedRideRequest._id, driver_id: userDetails.driver_details }, (response) => {
+                if(response) {
+                    setRideRequests(prev => {
+                        return prev.map(item => {
+                            if (item._id == selectedRideRequest._id) {
+                                item.available_drivers = item.available_drivers.filter(driver=>driver!==userDetails.driver_details)
+                            }
+                            return item
+                        })
+                    })
+                }
+            });
+        }
+        else {
+            // Accept Tow Request
+            socket.emit('accept_tow_request', { ride_id: selectedRideRequest._id, driver_id: userDetails.driver_details }, (response) => {
+                if(response) {
+                    setRideRequests(prev => {
+                        return prev.map(item => {
+                            if (item._id == selectedRideRequest._id) {
+                                item.available_drivers.push(userDetails.driver_details)
+                            }
+                            return item
+                        })
+                    })
+                }
+            });
+        }
+    }
 
 
     useEffect(() => {
-        /*if (isFocused && isInitialized) {
-            Geolocation.getCurrentPosition(
-                pos => {
-                    if (map.current) {
-                        const currentGeoLocation = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
-                        setCurrentLocation(currentGeoLocation)
-                        map.current.animateToRegion(currentGeoLocation, 1000);
-                        getNearestTows(currentGeoLocation)
-                    }
-                },
-                error => {
-                    console.log('request permission ==>>', error)
-                }
-            )
+        if (isFocused && isMapLoaded) {
+            requestLocationPermission()
         }
 
-        return (() => {
+        if (!isFocused) {
+            if (socket)
+                socket.close();
             if (watchId)
                 Geolocation.clearWatch(watchId);
-        })*/
-    }, [isFocused]);
+        }
+    }, [isFocused, isMapLoaded]);
 
     const requestLocationPermission = () => {
         try {
@@ -81,24 +119,12 @@ const Home = ({ navigation }) => {
         }
     }
 
-    const getNearestTows = async (location) => {
-        /*
-         * API GetNearestTows
-         */
-        let response = await API.getNearestRideRequest(location.latitude, location.longitude)
-        if (!response.status) {
-            return Toast.show({ type: 'error', message: response.error })
-        }
-        console.log(response.data)
-        //setNearbyTows(response.data)
-    }
-
-    const onLocationAvailable = (info=null) => {
-        if(info){
+    const onLocationAvailable = (info = null) => {
+        if (info) {
             const currentGeoLocation = { latitude: info.coords.latitude, longitude: info.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
-                        setCurrentLocation(currentGeoLocation)
-                        map.current.animateToRegion(currentGeoLocation, 1000);
-                        getNearestTows(currentGeoLocation)
+            setCurrentLocation(currentGeoLocation)
+            map.current.animateToRegion(currentGeoLocation, 1000);
+            socketHandler(currentGeoLocation)
         }
         if (watchId)
             Geolocation.clearWatch(watchId);
@@ -107,10 +133,6 @@ const Home = ({ navigation }) => {
                 if (map.current) {
                     const currentGeoLocation = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
                     setCurrentLocation(currentGeoLocation)
-                    if (!isInitialized) {
-                        isInitialized = true
-                        map.current.animateToRegion(currentGeoLocation, 1000);
-                    }
                 }
             },
             e => {
@@ -120,8 +142,8 @@ const Home = ({ navigation }) => {
                 enableHighAccuracy: true,
                 timeout: 20000,
                 maximumAge: 1000,
-                useSignificantChanges: true,
-                distanceFilter: 500, //500m
+                //useSignificantChanges: true,
+                //distanceFilter: 500, //500m
             }
         )
     }
@@ -180,7 +202,7 @@ const Home = ({ navigation }) => {
     return (
         <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
             <Header _this={{ navigation }} />
-            <Body _this={{ map, currentLocation, navigation, requestLocationPermission, nearbyTows }} />
+            <Body _this={{ map, currentLocation, navigation, setIsMapLoaded, rideRequests, selectedRideRequest, setSelectedRideRequest, processTowRequest, userDetails }} />
             <Popup _this={{ permissionPopup, setPermissionPopup, requestLocationPermission }} />
         </Container>
     )

@@ -11,13 +11,22 @@ import { useDdux, useTheme } from 'src/hooks'
 import API from 'src/services/api'
 import { Container, Toast } from 'src/components'
 
+var initialLoading = false
+
 const Splash = ({ navigation }) => {
     const [Colors, styles] = useTheme(style)
     const Ddux = useDdux()
     const userDetails = Ddux.cache('user')
+
+    useEffect(()=>{
+        initialLoading = false
+    },[])
+
     useEffect(() => {
-        if (userDetails !== null)
+        if (userDetails !== null && !initialLoading){
+            initialLoading = true 
             verifyLoginSession()
+        }
     }, [userDetails])
 
     const verifyLoginSession = async () => {
@@ -37,6 +46,7 @@ const Splash = ({ navigation }) => {
             else {
                 response.data.token_expiry = new Date().getTime() + 45 * 60000;
                 Config.session = { mobile: response.data.mobile, active_session_refresh_token: response.data.active_session_refresh_token, access_token: response.data.access_token, token_expiry: response.data.token_expiry }
+                Ddux.setCache('user', response.data)
             }
             navigation.replace('Home')
         }

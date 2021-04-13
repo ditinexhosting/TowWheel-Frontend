@@ -83,7 +83,8 @@ const styles = ({ Colors }) => (StyleSheet.create({
         backgroundColor: Colors.background,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        marginTop: Spacing.SCALE_10
+        marginTop: Spacing.SCALE_10,
+        overflow: 'hidden'
     },
     popupTitle: {
         fontSize: Typography.FONT_SIZE_15,
@@ -95,6 +96,60 @@ const styles = ({ Colors }) => (StyleSheet.create({
         resizeMode: 'contain',
         width: Mixins.scaleSize(150),
         height: Mixins.scaleSize(150)
+    },
+    towImage:{
+        resizeMode: 'contain',
+        width: Mixins.scaleSize(60),
+        height: Mixins.scaleSize(60)
+    },
+    locationTitle:{
+        fontSize: Typography.FONT_SIZE_12,
+        color: Colors.muted_text
+    },
+    location:{
+        fontSize: Typography.FONT_SIZE_12,
+        color: Colors.black,
+        marginRight: Spacing.SCALE_10
+    },
+    vehicleName:{
+        fontSize: Typography.FONT_SIZE_12,
+        color: Colors.muted_text,
+        fontWeight: 'bold'
+    },
+    value:{
+        fontSize: Typography.FONT_SIZE_16,
+        color: Colors.black,
+    },
+    symbol:{
+        fontSize: Typography.FONT_SIZE_12,
+        color: Colors.black,
+        fontWeight: 'bold'
+    },
+    selected:{
+        backgroundColor: Colors.grey
+    },
+    continueButton:{
+        backgroundColor: Colors.black,
+        padding: Spacing.SCALE_8,
+        borderRadius: 10,
+        alignItems: 'center',
+        width: Mixins.scaleSize(300)
+    },
+    continueButtonIcon:{
+        marginLeft: Spacing.SCALE_10,
+        marginRight: Spacing.SCALE_10,
+        backgroundColor: Colors.secondary20,
+        width: Mixins.scaleSize(30),
+        height: Mixins.scaleSize(30),
+        borderRadius: 100,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    continueButtonText:{
+        fontSize: Typography.FONT_SIZE_18,
+        color: Colors.white,
+        flex: 1,
+        textAlign: 'center'
     },
 })
 );
