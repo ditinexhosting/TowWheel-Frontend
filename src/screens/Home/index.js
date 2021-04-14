@@ -62,8 +62,9 @@ const Home = ({ navigation }) => {
     }, [intervalState]);
 
     useEffect(() => {
+        let interval = null
         if (isFocused){
-            const interval = setInterval(() => {
+            interval = setInterval(() => {
                 setIntervalState(prev => prev + 1)
             }, 60000);
         }
@@ -97,11 +98,16 @@ const Home = ({ navigation }) => {
     }
 
     const onDestinationSet = async (destination) => {
+        const data = {
+            destination: {address: destination.address, latitude: destination.location.lat, longitude: destination.location.lng},
+            source: {address: '', latitude: currentLocation.latitude, longitude: currentLocation.longitude}
+        }
+
         if (userDetails && Object.keys(userDetails).length !== 0) {
-            navigation.navigate('Home_Booking', { destination: destination, source: currentLocation })
+            navigation.navigate('Home_Booking', data )
         }
         else {
-            navigation.navigate('Login', { destination: destination, source: currentLocation })
+            navigation.navigate('Login', data)
         }
     }
 
