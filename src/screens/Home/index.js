@@ -44,6 +44,11 @@ const Home = ({ navigation }) => {
     })
     const map = useRef(null)
 
+    useEffect(() => {
+        if (userDetails && Object.keys(userDetails).length !== 0) {
+            getMyRideRequest()
+        }
+    }, [userDetails])
 
     useEffect(() => {
         if (isFocused && isMapLoaded) {
@@ -63,7 +68,7 @@ const Home = ({ navigation }) => {
 
     useEffect(() => {
         let interval = null
-        if (isFocused){
+        if (isFocused) {
             interval = setInterval(() => {
                 setIntervalState(prev => prev + 1)
             }, 60000);
@@ -97,14 +102,31 @@ const Home = ({ navigation }) => {
         setNearbyTows(response.data)
     }
 
+    const getMyRideRequest = async () => {
+        /*
+         * API getMyRideRequest
+         */
+        let response = await API.getMyRideRequest()
+        if (!response.status) {
+            return Toast.show({ type: 'error', message: response.error })
+        }
+        response = response.data
+        if (response)
+            Ddux.setCache('ride', {
+                ...response,
+                destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
+                source: { address: response.source.address, latitude: response.source.coordinates[1], longitude: response.source.coordinates[0] }
+            })
+    }
+
     const onDestinationSet = async (destination) => {
         const data = {
-            destination: {address: destination.address, latitude: destination.location.lat, longitude: destination.location.lng},
-            source: {address: '', latitude: currentLocation.latitude, longitude: currentLocation.longitude}
+            destination: { address: destination.address, latitude: destination.location.lat, longitude: destination.location.lng },
+            source: { address: '', latitude: currentLocation.latitude, longitude: currentLocation.longitude }
         }
 
         if (userDetails && Object.keys(userDetails).length !== 0) {
-            navigation.navigate('Home_Booking', data )
+            navigation.navigate('Home_Booking', data)
         }
         else {
             navigation.navigate('Login', data)

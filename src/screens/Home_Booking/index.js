@@ -61,7 +61,7 @@ const Booking = ({ route, navigation }) => {
       socket.emit('initialize', { ride_id: rideDetails._id }, (response)=>{
         Ddux.setCache('ride', {
           ...response,
-          destination: { address: destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
+          destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
           source: { address: response.source.address, latitude: response.source.coordinates[1], longitude: response.source.coordinates[0] }
         })
       })  
