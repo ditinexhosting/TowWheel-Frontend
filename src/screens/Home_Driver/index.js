@@ -5,6 +5,7 @@ import {
     Text,
     Animated,
     Easing,
+    SafeAreaView,
     PermissionsAndroid,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
@@ -64,11 +65,11 @@ const Home = ({ navigation }) => {
     const processTowRequest = async () => {
         if (selectedRideRequest.available_drivers.includes(userDetails.driver_details)) {
             socket.emit('decline_tow_request', { ride_id: selectedRideRequest._id, driver_id: userDetails.driver_details }, (response) => {
-                if(response) {
+                if (response) {
                     setRideRequests(prev => {
                         return prev.map(item => {
                             if (item._id == selectedRideRequest._id) {
-                                item.available_drivers = item.available_drivers.filter(driver=>driver!==userDetails.driver_details)
+                                item.available_drivers = item.available_drivers.filter(driver => driver !== userDetails.driver_details)
                             }
                             return item
                         })
@@ -79,7 +80,8 @@ const Home = ({ navigation }) => {
         else {
             // Accept Tow Request
             socket.emit('accept_tow_request', { ride_id: selectedRideRequest._id, driver_id: userDetails.driver_details }, (response) => {
-                if(response) {
+                if (response) {
+                    console.log(response)
                     setRideRequests(prev => {
                         return prev.map(item => {
                             if (item._id == selectedRideRequest._id) {
@@ -120,6 +122,7 @@ const Home = ({ navigation }) => {
     }
 
     const onLocationAvailable = (info = null) => {
+        console.log(info)
         if (info) {
             const currentGeoLocation = { latitude: info.coords.latitude, longitude: info.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
             setCurrentLocation(currentGeoLocation)
@@ -191,21 +194,24 @@ const Home = ({ navigation }) => {
                     error => {
                         console.log('request permission ==>>', error)
                         setPermissionPopup(true)
-                    }
+                    },
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
                 )
             }
         } catch (err) {
-            console.warn(err);
-        }
+    console.warn(err);
+}
     };
 
-    return (
-        <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
+return (
+    <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
+        <SafeAreaView style={styles.flex1}>
             <Header _this={{ navigation }} />
             <Body _this={{ map, currentLocation, navigation, setIsMapLoaded, rideRequests, selectedRideRequest, setSelectedRideRequest, processTowRequest, userDetails }} />
             <Popup _this={{ permissionPopup, setPermissionPopup, requestLocationPermission }} />
-        </Container>
-    )
+        </SafeAreaView>
+    </Container>
+)
 }
 
 export default Home
