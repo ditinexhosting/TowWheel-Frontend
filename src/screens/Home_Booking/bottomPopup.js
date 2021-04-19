@@ -5,7 +5,8 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
-    FlatList
+    FlatList,
+    TouchableWithoutFeedback
 } from 'react-native';
 import { useTheme } from 'src/hooks'
 import style from './style'
@@ -40,7 +41,8 @@ const TowSearchProgress = ({ _this }) => {
         }
         rating = parseFloat(rating / item.reviews.length || 0).toFixed(1)
         return (
-            <View style={styles.renderItem}>
+            <TouchableWithoutFeedback onPress={()=>_this.setSelectedDriver(item)} >
+            <View style={[styles.renderItem,(_this.selectedDriver && _this.selectedDriver._id)? styles.renderSelectedItem : null ]}>
                 <Image source={{ uri: API_STORAGE + item.profile_picture }} style={styles.dp} />
                 <Text style={styles.itemName}>{item.user_details.name}</Text>
                 <Text style={styles.cost}><Text style={styles.currency}>$</Text> {parseFloat(item.vehicle_details.cost_per_km * _this.rideDetails.distance).toFixed(2)}</Text>
@@ -49,6 +51,7 @@ const TowSearchProgress = ({ _this }) => {
                     <Text style={styles.ratingValue}> {rating}</Text>
                 </View>
             </View>
+            </TouchableWithoutFeedback>
         )
     }
 

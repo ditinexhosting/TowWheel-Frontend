@@ -27,6 +27,8 @@ const Booking = ({ route, navigation }) => {
   const [distanceTime, setDistanceTime] = useState({ distance: null, duration: null })
   const [towType, setTowType] = useState('BIKE')
   const [popupStep, setPopupStep] = useState(rideDetails != null ? 1 : 0)
+  const [selectedDriver, setSelectedDriver] = useState(null)
+  const [driverDistanceTime, setDriverDistanceTime] = useState({ distance: null, duration: null })
   const [, forceRender] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
@@ -110,7 +112,7 @@ const Booking = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, destination, map, setDistanceTime, source, towType, setTowType, popupStep, setPopupStep, createRideRequest, rideDetails, cancelRideRequest }} />
+      <Body _this={{ navigation, destination, map, setDistanceTime, source, towType, setTowType, popupStep, setPopupStep, createRideRequest, rideDetails, cancelRideRequest, selectedDriver, setSelectedDriver, driverDistanceTime, setDriverDistanceTime }} />
     </Container>
   )
 }
