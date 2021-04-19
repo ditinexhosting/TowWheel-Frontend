@@ -194,13 +194,13 @@ const Home = ({ navigation }) => {
             let granted = true
             let always = await Geolocation.requestAuthorization('always')
             let whenInUse = await Geolocation.requestAuthorization('whenInUse')
+
             if (always !== 'granted' && whenInUse !== 'granted')
                 granted = false
 
             if (!granted)
                 setPermissionPopup(true)
             else {
-                onLocationAvailable()
                 Geolocation.getCurrentPosition(
                     info => { onLocationAvailable(info) },
                     error => {
