@@ -101,7 +101,7 @@ const Body = ({ _this }) => {
                 <View style={styles.hireMeContainer}>
                     <Text style={styles.hireMeText}><Icon name='location' size={Typography.FONT_SIZE_18} color={Colors.black} /> {parseFloat(_this.driverDistanceTime.distance).toFixed(1)} km</Text>
                     <Text style={styles.hireMeText}><Icon name='time' size={Typography.FONT_SIZE_18} color={Colors.black} /> {parseFloat(_this.driverDistanceTime.duration / 60).toFixed(1)} hr</Text>
-                    <TouchableOpacity onPress={() => null} style={[styles.flexRow, styles.continueButton,styles.hireMeButton]}>
+                    <TouchableOpacity onPress={() => _this.hireMe()} style={[styles.flexRow, styles.continueButton,styles.hireMeButton]}>
                         <Text style={styles.continueButtonText}>Hire Me</Text>
                         <View style={styles.continueButtonIcon}>
                             <Icon name='ios-arrow-forward-sharp' size={Typography.FONT_SIZE_25} color={Colors.primary} />

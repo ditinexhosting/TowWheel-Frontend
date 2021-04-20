@@ -83,6 +83,23 @@ const Booking = ({ route, navigation }) => {
     })  
   }
 
+  const hireMe = async () => {
+    Ddux.setData('loading', true)
+    socket.emit('hire_driver', { active_vehicle: selectedDriver.active_vehicle, driver_id: selectedDriver._id }, (response)=>{
+      Ddux.setData('loading', false)
+      if(response){
+        if(response == false)
+          return Toast.show({ type: 'error', message: 'Oops! Driver is currently unavailable. Please try another driver.' })
+        Ddux.setCache('ride', {
+          ...response,
+          destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
+          source: { address: response.source.address, latitude: response.source.coordinates[1], longitude: response.source.coordinates[0] }
+      })
+        navigation.pop()
+      }
+    })  
+  }
+
   const createRideRequest = async () => {
     /*
      * API createRideRequest
@@ -112,7 +129,7 @@ const Booking = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, destination, map, setDistanceTime, source, towType, setTowType, popupStep, setPopupStep, createRideRequest, rideDetails, cancelRideRequest, selectedDriver, setSelectedDriver, driverDistanceTime, setDriverDistanceTime }} />
+      <Body _this={{ navigation, destination, map, setDistanceTime, source, towType, setTowType, popupStep, setPopupStep, createRideRequest, rideDetails, cancelRideRequest, selectedDriver, setSelectedDriver, driverDistanceTime, setDriverDistanceTime, hireMe }} />
     </Container>
   )
 }
