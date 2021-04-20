@@ -17,6 +17,7 @@ const Router = () => {
         <Stack.Screen name="Login" component={Screen.Login} />
         <Stack.Screen name="Home_Booking" component={Screen.Home_Booking} />
         <Stack.Screen name="Home_InProgress" component={Screen.Home_InProgress} />
+        <Stack.Screen name="Home_Driver_InProgress" component={Screen.Home_Driver_InProgress} />
         <Stack.Screen name="Home" >
           {props => <Drawer {...props} />}
         </Stack.Screen>

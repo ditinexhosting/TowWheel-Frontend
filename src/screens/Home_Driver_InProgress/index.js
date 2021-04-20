@@ -8,6 +8,7 @@ import styles from './style'
 import Config from 'src/config'
 import { useIsFocused } from '@react-navigation/native';
 import { Container, Toast } from 'src/components'
+import Geolocation from 'react-native-geolocation-service';
 import { Mixins, Spacing, Typography } from 'src/styles'
 import API from 'src/services/api'
 import { useDdux } from 'src/hooks'
@@ -15,33 +16,31 @@ import Body from './body'
 import Header from './header'
 
 var socket = null
+var watchId = null
 
 const InProgress = ({ route, navigation }) => {
+  const { ride_details = null } = route.params
   const isFocused = useIsFocused()
   const Ddux = useDdux()
-  const rideDetails = Ddux.cache('ride')
   const userDetails = Ddux.cache('user')
+  const [rideDetails, setRideDetails] = useState(ride_details)
   const map = useRef(null)
-  const [driverVehicleDetails, setDriverVehicleDetails] = useState(null)
+  const [isMapLoaded, setIsMapLoaded] = useState(false)
+  const [currentLocation,setCurrentLocation] = useState(null)
   const [popupStep, setPopupStep] = useState(0)
   const [, forceRender] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
-    if(rideDetails.ride_status == 'completed' || rideDetails.ride_status == 'cancelled')
-      navigation.pop()
-  }, [rideDetails])
+    socketHandler()
+    onLocationChange()
 
-
-  useEffect(() => {
-    if (isFocused) {
-      socketHandler()
-    }
-
-    if (!isFocused) {
+    return () => {
       if (socket)
         socket.close();
+      if (watchId)
+        Geolocation.clearWatch(watchId);
     }
-  }, [isFocused]);
+  }, []);
 
   /*
    * Socket Handler
@@ -49,19 +48,35 @@ const InProgress = ({ route, navigation }) => {
   const socketHandler = async () => {
     socket = await API.SOCKET('/user-driver-inprogress')
     socket.on('connect', () => {
-      socket.emit('initialize_user', { ride_id: rideDetails._id }, (response) => {
-        Ddux.setCache('ride', {
-          ...rideDetails,
-          ride_status: response.ride_status
-        })
-        setDriverVehicleDetails((prev)=>({driver_details: {...response.assigned_driver,...response.driver_details}, vehicle_details: response.assigned_vehicle}))
+      socket.emit('initialize_driver', { ride_id: rideDetails._id }, (response) => {
+
       })
     });
-    
+
 
     socket.on('disconnect', () => {
 
     });
+  }
+
+  const onLocationChange = () => {
+    if (watchId)
+      Geolocation.clearWatch(watchId);
+    watchId = Geolocation.watchPosition(
+      pos => {
+        setCurrentLocation({heading: pos.coords.heading, latitude: pos.coords.latitude, longitude: pos.coords.longitude})
+      },
+      e => {
+        console.log('watchId Error => ', e)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 500,
+        //useSignificantChanges: true,
+        distanceFilter: 5, //500m
+      }
+    )
   }
 
   const cancelRideRequest = async () => {
@@ -73,11 +88,10 @@ const InProgress = ({ route, navigation }) => {
     })
   }
 
-  
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails }} />
+      <Body _this={{ navigation, map, rideDetails, currentLocation }} />
     </Container>
   )
 }

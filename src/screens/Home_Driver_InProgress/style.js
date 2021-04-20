@@ -104,80 +104,21 @@ const style = ({ Colors }) => (StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: Colors.grey
     },
-    renderItem:{
+    callChatButton:{
+        backgroundColor: Colors.black,
+        padding: Spacing.SCALE_3,
+        borderRadius: 100,
         alignItems: 'center',
+        marginHorizontal: Spacing.SCALE_8,
+    },
+    callChatButtonIcon:{
+        backgroundColor: Colors.secondary20,
+        width: Mixins.scaleSize(40),
+        height: Mixins.scaleSize(40),
+        borderRadius: 100,
         justifyContent: 'center',
-        width: Mixins.scaleSize(170),
-        borderWidth: 0.5,
-        borderColor: Colors.grey,
-        borderRadius: 10,
-        paddingVertical: Spacing.SCALE_5
+        alignItems: 'center'
     },
-    renderSelectedItem:{
-        backgroundColor: Colors.grey,
-    },
-    dp:{
-        width: Mixins.scaleSize(50),
-        height: Mixins.scaleSize(50),
-        backgroundColor: Colors.grey,
-        borderRadius: 100
-    },
-    itemName:{
-        fontSize: Typography.FONT_SIZE_14,
-        color: Colors.black,
-        marginVertical: Spacing.SCALE_5
-    },
-    currency:{
-        fontSize: Typography.FONT_SIZE_20,
-        fontWeight: 'bold'
-    },
-    cost:{
-        fontSize: Typography.FONT_SIZE_23,
-        color: Colors.primary
-    },
-    rating:{
-        position:'absolute',
-        right: Spacing.SCALE_10,
-        top: Spacing.SCALE_10,
-        padding: Spacing.SCALE_4,
-        backgroundColor: Colors.secondary_very_light,
-        borderRadius: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    ratingValue:{
-        color: Colors.primary,
-        fontSize: Typography.FONT_SIZE_14
-    },
-    markerImage: {
-        width: Mixins.scaleSize(30),
-        height: Mixins.scaleSize(30),
-        resizeMode: 'contain',
-        /*transform: [{
-            rotate: '270deg'
-        }]*/
-    },
-    hireMeContainer:{
-        position: 'absolute',
-        backgroundColor: Colors.background,
-        width: Mixins.scaleSize(150),
-        alignSelf: 'center',
-        bottom: Mixins.scaleSize(300) + Spacing.SCALE_30,
-        borderColor: Colors.black,
-        borderWidth: 1,
-        borderRadius: 11
-    },
-    hireMeButton:{
-        marginHorizontal: 0,
-        borderTopRightRadius: 0,
-        borderTopLeftRadius: 0
-    },
-    hireMeText:{
-        fontSize: Typography.FONT_SIZE_16,
-        color: Colors.black,
-        margin: Spacing.SCALE_5
-    }
 })
 );
 

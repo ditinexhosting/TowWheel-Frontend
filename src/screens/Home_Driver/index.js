@@ -37,6 +37,7 @@ const Home = ({ navigation }) => {
     const [permissionPopup, setPermissionPopup] = useState(false)
     const [rideRequests, setRideRequests] = useState([])
     const [selectedRideRequest, setSelectedRideRequest] = useState(null)
+    const [isActiveRideExists, setIsActiveRideExists] = useState(null)
     const [isMapLoaded, setIsMapLoaded] = useState(false)
     const [currentLocation, setCurrentLocation] = useState({
         latitude: 31.767664,
@@ -52,10 +53,13 @@ const Home = ({ navigation }) => {
     const socketHandler = async (currentLocation) => {
         socket = await API.SOCKET('/driver-ride-request')
         socket.on('connect', () => {
-            socket.emit('initialize', { _id: userDetails.driver_details, location: currentLocation })
+            socket.emit('initialize', { _id: userDetails.driver_details, location: currentLocation },(response)=>{
+                setIsActiveRideExists(response.active_ride)
+                setRideRequests(prev => response.nearest_ride_requests)
+            })
         });
         socket.on('initial_ride_requests', (data) => {
-            setRideRequests(prev => data)
+            
         })
         socket.on('disconnect', () => {
 
@@ -122,7 +126,6 @@ const Home = ({ navigation }) => {
     }
 
     const onLocationAvailable = (info = null) => {
-        console.log(info)
         if (info) {
             const currentGeoLocation = { latitude: info.coords.latitude, longitude: info.coords.longitude, latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta }
             setCurrentLocation(currentGeoLocation)
@@ -207,7 +210,7 @@ return (
     <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
         <SafeAreaView style={styles.flex1}>
             <Header _this={{ navigation }} />
-            <Body _this={{ map, currentLocation, navigation, setIsMapLoaded, rideRequests, selectedRideRequest, setSelectedRideRequest, processTowRequest, userDetails }} />
+            <Body _this={{ map, currentLocation, navigation, setIsMapLoaded, rideRequests, selectedRideRequest, setSelectedRideRequest, processTowRequest, userDetails, isActiveRideExists }} />
             <Popup _this={{ permissionPopup, setPermissionPopup, requestLocationPermission }} />
         </SafeAreaView>
     </Container>
