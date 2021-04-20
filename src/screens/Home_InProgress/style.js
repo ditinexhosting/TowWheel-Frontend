@@ -154,9 +154,9 @@ const style = ({ Colors }) => (StyleSheet.create({
         width: Mixins.scaleSize(30),
         height: Mixins.scaleSize(30),
         resizeMode: 'contain',
-        /*transform: [{
+        transform: [{
             rotate: '270deg'
-        }]*/
+        }]
     },
     hireMeContainer:{
         position: 'absolute',

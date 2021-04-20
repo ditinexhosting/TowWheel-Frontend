@@ -34,28 +34,6 @@ const BottomPopup = ({ _this }) => {
 const TowSearchProgress = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
 
-    const renderItem = ({ item, index }) => {
-        let rating = 0
-        for (let i = 0; i < item.reviews.length; i++) {
-            rating += item.reviews[i].rating
-        }
-        rating = parseFloat(rating / item.reviews.length || 0).toFixed(1)
-        return (
-            <TouchableWithoutFeedback onPress={() => _this.setSelectedDriver(item)} >
-                <View style={[styles.renderItem, (_this.selectedDriver && _this.selectedDriver._id) ? styles.renderSelectedItem : null]}>
-                    <Image source={{ uri: API_STORAGE + item.profile_picture }} style={styles.dp} />
-                    <Text style={styles.itemName}>{item.user_details.name}</Text>
-                    <Text style={styles.cost}><Text style={styles.currency}>$</Text> {parseFloat(item.vehicle_details.cost_per_km * _this.rideDetails.distance).toFixed(2)}</Text>
-                    <View style={styles.rating}>
-                        <Icon2 name='star' size={Typography.FONT_SIZE_16} color={Colors.primary} />
-                        <Text style={styles.ratingValue}> {rating}</Text>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
-        )
-    }
-
-
     return _this.rideDetails && (
         <View style={styles.content}>
 

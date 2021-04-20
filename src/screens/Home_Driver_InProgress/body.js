@@ -19,7 +19,7 @@ import { tow_bike, tow_truck, tow_private } from 'src/assets'
 const Body = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
     const onMapReadyHandler = useCallback(() => {
-        _this.map.current.fitToSuppliedMarkers(['source', 'destination', 'driver'])
+        _this.map.current.fitToSuppliedMarkers(['source', 'destination'])
     }, [_this.map])
 
     //const icon = _this.driverVehicleDetails && _this.driverVehicleDetails.vehicle_details.type == 'TRUCK' ? tow_truck : _this.driverVehicleDetails && _this.driverVehicleDetails.vehicle_details.type == 'BIKE' ? tow_bike : tow_private

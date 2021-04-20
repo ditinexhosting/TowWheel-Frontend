@@ -30,6 +30,7 @@ const InProgress = ({ route, navigation }) => {
   const [popupStep, setPopupStep] = useState(0)
   const [, forceRender] = useReducer(x => x + 1, 0);
 
+
   useEffect(() => {
     socketHandler()
     onLocationChange()
@@ -42,6 +43,11 @@ const InProgress = ({ route, navigation }) => {
     }
   }, []);
 
+  useEffect(()=>{
+    if (socket)
+    socket.emit('update_driver_location', { driver_id: rideDetails.assigned_driver, location: currentLocation })
+  },[currentLocation])
+
   /*
    * Socket Handler
    */
@@ -49,10 +55,9 @@ const InProgress = ({ route, navigation }) => {
     socket = await API.SOCKET('/user-driver-inprogress')
     socket.on('connect', () => {
       socket.emit('initialize_driver', { ride_id: rideDetails._id }, (response) => {
-
+        setRideDetails(prev=>response)
       })
     });
-
 
     socket.on('disconnect', () => {
 
@@ -72,9 +77,9 @@ const InProgress = ({ route, navigation }) => {
       {
         enableHighAccuracy: true,
         timeout: 20000,
-        maximumAge: 500,
+        maximumAge: 1000,
         //useSignificantChanges: true,
-        distanceFilter: 5, //500m
+        //distanceFilter: 500, //500m
       }
     )
   }
