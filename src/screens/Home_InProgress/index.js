@@ -23,7 +23,7 @@ const InProgress = ({ route, navigation }) => {
   const userDetails = Ddux.cache('user')
   const map = useRef(null)
   const [driverVehicleDetails, setDriverVehicleDetails] = useState(null)
-  const [popupStep, setPopupStep] = useState(0)
+  const [arrivingIn, setArrivingIn] = useState('0')
   const [, forceRender] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const InProgress = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails }} />
+      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails, arrivingIn, setArrivingIn }} />
     </Container>
   )
 }

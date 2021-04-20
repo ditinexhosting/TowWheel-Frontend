@@ -81,8 +81,8 @@ const Body = ({ _this }) => {
                         optimizeWaypoints={false}
                         mode="DRIVING"
                         onReady={result => {
-                            console.log(result.distance,result.duration)
-                            //_this.setDriverDistanceTime({ distance: result.distance, duration: result.duration })
+                            _this.setArrivingIn(result.duration)
+                            //console.log(result.distance,result.duration)
                         }}
                     />
                 }
