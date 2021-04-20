@@ -24,8 +24,6 @@ const Body = ({ _this }) => {
 
     const icon = _this.selectedDriver && _this.selectedDriver.vehicle_details.type == 'TRUCK' ? tow_truck : _this.selectedDriver && _this.selectedDriver.vehicle_details.type == 'BIKE' ? tow_bike : tow_private
 
-    console.log(_this.driverDistanceTime)
-
     return (
         <View style={styles.flex1}>
             <MapView
