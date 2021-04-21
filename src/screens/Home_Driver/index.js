@@ -85,7 +85,6 @@ const Home = ({ navigation }) => {
             // Accept Tow Request
             socket.emit('accept_tow_request', { ride_id: selectedRideRequest._id, driver_id: userDetails.driver_details }, (response) => {
                 if (response) {
-                    console.log(response)
                     setRideRequests(prev => {
                         return prev.map(item => {
                             if (item._id == selectedRideRequest._id) {

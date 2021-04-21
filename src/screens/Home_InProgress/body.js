@@ -4,7 +4,8 @@ import {
     Text,
     Image,
     TouchableOpacity,
-    TextInput
+    TextInput,
+    Platform
 } from 'react-native';
 import { useTheme } from 'src/hooks'
 import style from './style'
@@ -16,11 +17,60 @@ import MapViewDirections from 'react-native-maps-directions'
 import BottomPopup from './bottomPopup'
 import { tow_bike, tow_truck, tow_private } from 'src/assets'
 
+console.disableYellowBox = true;
+
+const EDGE_PADDING = {
+    top: Mixins.scaleSize(50),
+    right: Mixins.scaleSize(50),
+    bottom: Mixins.scaleSize(50),
+    left: Mixins.scaleSize(50)
+}
+
+var movedToRegion = false
+
 const Body = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
     const onMapReadyHandler = useCallback(() => {
-        _this.map.current.fitToSuppliedMarkers(['source', 'destination', 'driver'])
+        _this.map.current.fitToSuppliedMarkers(['destination', 'source', 'driver'], { edgePadding: EDGE_PADDING, animated: true })
     }, [_this.map])
+
+    const driverMarker = useRef(null)
+
+    const driverMarkerInitialRegion = useRef(new AnimatedRegion({
+        latitude: _this.rideDetails.source.latitude,
+        longitude: _this.rideDetails.source.longitude,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+    })).current
+
+    useEffect(() => {
+        if (_this.driverVehicleDetails) {
+
+            const newCoordinate = { latitude: _this.driverVehicleDetails.driver_details.location.coordinates[1], longitude: _this.driverVehicleDetails.driver_details.location.coordinates[0], latitudeDelta: 0.02, longitudeDelta: 0.02 }
+
+            if (Platform.OS === 'android') {
+                if (driverMarker) {
+                    driverMarker.animateMarkerToCoordinate(newCoordinate, 4000);//  number of duration between points
+                }
+            } else {
+                driverMarkerInitialRegion.timing(newCoordinate, {
+                    useNativeDriver: false
+                }).start()
+            }
+
+            if(!movedToRegion && _this.map){
+                movedToRegion = true
+                setTimeout(()=>{
+                    _this.map.current.fitToSuppliedMarkers(['source', 'driver','destination'], { edgePadding: EDGE_PADDING, animated: true })
+                },3000)
+            }
+        }
+
+        if(!_this.driverVehicleDetails)
+        movedToRegion = false
+
+
+    }, [_this.driverVehicleDetails])
 
     const icon = _this.driverVehicleDetails && _this.driverVehicleDetails.vehicle_details.type == 'TRUCK' ? tow_truck : _this.driverVehicleDetails && _this.driverVehicleDetails.vehicle_details.type == 'BIKE' ? tow_bike : tow_private
 
@@ -55,29 +105,28 @@ const Body = ({ _this }) => {
                     <Icon name='ios-location-sharp' size={40} color={Colors.primary} style={{ alignSelf: 'baseline' }} />
                 </Marker>
                 {_this.driverVehicleDetails &&
-                    <Marker
+                    <Marker.Animated
+                        ref={driverMarker}
                         flat={true}
+                        anchor={{ x: 1, y: 0.5 }}
                         identifier='driver'
-                        coordinate={{ latitude: _this.driverVehicleDetails.driver_details.location.coordinates[1], longitude: _this.driverVehicleDetails.driver_details.location.coordinates[0] }}
+                        coordinate={driverMarkerInitialRegion}
                         title={_this.driverVehicleDetails.driver_details.name}
-                        style={{
-                            transform: [{
-                                rotate: _this.driverVehicleDetails.driver_details.location.heading === undefined ? '0deg' : `${_this.driverVehicleDetails.driver_details.location.heading}deg`
-                            }]
-                        }}
                     >
-                        <View style={styles.marker}>
-                            <Image source={icon} style={styles.markerImage} />
-                        </View>
-                    </Marker>
+                        <Image source={icon} style={[styles.markerImage, {
+                            transform: [{
+                                rotate: _this.driverVehicleDetails.driver_details.location.heading === undefined ? '0deg' : `${_this.driverVehicleDetails.driver_details.location.heading + 270}deg`
+                            }]
+                        }]} />
+                    </Marker.Animated>
                 }
                 {_this.driverVehicleDetails && _this.rideDetails.ride_status == 'accepted' &&
                     <MapViewDirections
                         origin={{ latitude: _this.driverVehicleDetails.driver_details.location.coordinates[1], longitude: _this.driverVehicleDetails.driver_details.location.coordinates[0] }}
                         destination={{ latitude: _this.rideDetails.source.latitude, longitude: _this.rideDetails.source.longitude }}
                         apikey={GOOGLE_MAP_API_KEY}
-                        strokeWidth={1}
-                        strokeColor={Colors.primary}
+                        strokeWidth={4}
+                        strokeColor={Colors.ascent}
                         optimizeWaypoints={false}
                         mode="DRIVING"
                         onReady={result => {
@@ -104,3 +153,7 @@ const Body = ({ _this }) => {
 }
 
 export default Body
+
+/*
+coordinate={{ latitude: _this.driverVehicleDetails.driver_details.location.coordinates[1], longitude: _this.driverVehicleDetails.driver_details.location.coordinates[0] }}
+*/

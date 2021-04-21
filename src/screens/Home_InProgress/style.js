@@ -120,12 +120,9 @@ const style = ({ Colors }) => (StyleSheet.create({
         alignItems: 'center'
     },
     markerImage: {
-        width: Mixins.scaleSize(30),
-        height: Mixins.scaleSize(30),
-        resizeMode: 'contain',
-        transform: [{
-            rotate: '270deg'
-        }]
+        width: Mixins.scaleSize(35),
+        height: Mixins.scaleSize(18),
+        resizeMode: 'contain'
     }
 })
 );

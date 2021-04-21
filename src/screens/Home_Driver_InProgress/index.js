@@ -69,7 +69,11 @@ const InProgress = ({ route, navigation }) => {
       Geolocation.clearWatch(watchId);
     watchId = Geolocation.watchPosition(
       pos => {
+        // Catch mocked data only for debugging
+        if(pos.mocked){
+          //console.log(pos)
         setCurrentLocation({heading: pos.coords.heading, latitude: pos.coords.latitude, longitude: pos.coords.longitude})
+        }
       },
       e => {
         console.log('watchId Error => ', e)

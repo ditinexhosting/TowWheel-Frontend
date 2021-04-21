@@ -26,10 +26,9 @@ const InProgress = ({ route, navigation }) => {
   const [arrivingIn, setArrivingIn] = useState('0')
   const [, forceRender] = useReducer(x => x + 1, 0);
 
-  useEffect(() => {
-    if(rideDetails.ride_status == 'completed' || rideDetails.ride_status == 'cancelled')
-      navigation.pop()
-  }, [rideDetails])
+  useEffect(()=>{
+    //console.log('Driver details changed >> ',driverVehicleDetails)
+  },[driverVehicleDetails])
 
 
   useEffect(() => {
@@ -58,6 +57,16 @@ const InProgress = ({ route, navigation }) => {
       })
     });
     
+    socket.on('driver_location_changed',(response) => {
+      
+      setDriverVehicleDetails((prev)=>{
+        temp = {...prev}
+        temp.driver_details.location.heading = response.heading
+        temp.driver_details.location.coordinates = [response.longitude,response.latitude]
+        console.log('Location changed >>',temp)
+        return temp
+      })
+    })
 
     socket.on('disconnect', () => {
 
