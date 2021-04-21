@@ -33,6 +33,7 @@ const BottomPopup = ({ _this }) => {
 
 const TowSearchProgress = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
+    
 
     return _this.rideDetails && (
         <View style={styles.content}>
@@ -58,7 +59,7 @@ const TowSearchProgress = ({ _this }) => {
                     <Text style={styles.distance}>  {_this.driverVehicleDetails && _this.driverVehicleDetails.driver_details.name}</Text>
                 </View>
                 <View style={[styles.flexRow, styles.alignCenter]}>
-                    <TouchableOpacity onPress={() => null} style={[styles.flexRow, styles.callChatButton]}>
+                    <TouchableOpacity onPress={() => _this.callDriver()} style={[styles.flexRow, styles.callChatButton]}>
                         <View style={styles.callChatButtonIcon}>
                             <Icon name='ios-call' size={Typography.FONT_SIZE_25} color={Colors.primary} />
                         </View>

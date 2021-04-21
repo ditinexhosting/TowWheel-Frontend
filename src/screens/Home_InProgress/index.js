@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef, useReducer } from 'react';
 import {
   View,
   Text,
-  BackHandler
+  BackHandler,
+  Platform,
+  Linking
 } from 'react-native';
 import styles from './style'
 import Config from 'src/config'
@@ -60,10 +62,10 @@ const InProgress = ({ route, navigation }) => {
     socket.on('driver_location_changed',(response) => {
       
       setDriverVehicleDetails((prev)=>{
-        temp = {...prev}
+        let temp = {...prev}
         temp.driver_details.location.heading = response.heading
         temp.driver_details.location.coordinates = [response.longitude,response.latitude]
-        console.log('Location changed >>',temp)
+        //console.log('Location changed >>',temp)
         return temp
       })
     })
@@ -76,17 +78,22 @@ const InProgress = ({ route, navigation }) => {
   const cancelRideRequest = async () => {
     socket.emit('cancel_ride_request', { ride_id: rideDetails._id }, (response) => {
       if (response) {
-        setPopupStep(prev => 0)
+        navigation.pop()
         Ddux.setCache('ride', null)
       }
     })
   }
 
+  const callDriver = () => {
+    let phoneNumber = `tel:${driverVehicleDetails.driver_details.mobile}`;
+    Linking.openURL(phoneNumber);
+  };
+
   
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails, arrivingIn, setArrivingIn }} />
+      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails, arrivingIn, setArrivingIn, cancelRideRequest, callDriver }} />
     </Container>
   )
 }

@@ -5,7 +5,9 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
-    Platform
+    Platform,
+    Animated,
+    Easing
 } from 'react-native';
 import { useTheme } from 'src/hooks'
 import style from './style'
@@ -15,7 +17,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion, Callout } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions'
 import BottomPopup from './bottomPopup'
-import { tow_bike, tow_truck, tow_private } from 'src/assets'
+import { tow_bike, tow_truck, tow_private, tow } from 'src/assets'
 
 console.disableYellowBox = true;
 
@@ -30,6 +32,8 @@ var movedToRegion = false
 
 const Body = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
+    const [initialTowMarkerOpacity, setInitialTowMarkerOpacity] = useState(0)
+
     const onMapReadyHandler = useCallback(() => {
         _this.map.current.fitToSuppliedMarkers(['destination', 'source', 'driver'], { edgePadding: EDGE_PADDING, animated: true })
     }, [_this.map])
@@ -43,6 +47,8 @@ const Body = ({ _this }) => {
         longitudeDelta: 0.02,
     })).current
 
+    const spinValue = useRef(new Animated.Value(0)).current;
+
     useEffect(() => {
         if (_this.driverVehicleDetails) {
 
@@ -50,29 +56,51 @@ const Body = ({ _this }) => {
 
             if (Platform.OS === 'android') {
                 if (driverMarker) {
-                    driverMarker.animateMarkerToCoordinate(newCoordinate, 4000);//  number of duration between points
+                    driverMarker.current.animateMarkerToCoordinate(newCoordinate, 2000);//  number of duration between points
+                    if (initialTowMarkerOpacity == 0)
+                        setTimeout(() => {
+                            setInitialTowMarkerOpacity(1)
+                        }, 3000)
                 }
             } else {
                 driverMarkerInitialRegion.timing(newCoordinate, {
                     useNativeDriver: false
-                }).start()
+                }).start(initialTowMarkerOpacity == 0 && setTimeout(() => {
+                    setInitialTowMarkerOpacity(1)
+                }, 3000))
             }
 
-            if(!movedToRegion && _this.map){
+            Animated.timing(
+                spinValue,
+                {
+                    toValue: ( _this.driverVehicleDetails.driver_details.location.heading + 270) % 360,
+                    duration: 2000,
+                }
+            ).start();
+
+
+            if (!movedToRegion && _this.map) {
                 movedToRegion = true
-                setTimeout(()=>{
-                    _this.map.current.fitToSuppliedMarkers(['source', 'driver','destination'], { edgePadding: EDGE_PADDING, animated: true })
-                },3000)
+                setTimeout(() => {
+                    if (_this.map)
+                        _this.map.current.fitToSuppliedMarkers(['source', 'driver', 'destination'], { edgePadding: EDGE_PADDING, animated: true })
+                }, 3000)
             }
         }
 
-        if(!_this.driverVehicleDetails)
-        movedToRegion = false
+        if (!_this.driverVehicleDetails)
+            movedToRegion = false
 
 
     }, [_this.driverVehicleDetails])
 
     const icon = _this.driverVehicleDetails && _this.driverVehicleDetails.vehicle_details.type == 'TRUCK' ? tow_truck : _this.driverVehicleDetails && _this.driverVehicleDetails.vehicle_details.type == 'BIKE' ? tow_bike : tow_private
+
+    // Next, interpolate beginning and end values (in this case 0 and 1)
+    const spin = spinValue.interpolate({
+        inputRange: [0, 360],
+        outputRange: ['0deg', '360deg']
+    })
 
     return (
         <View style={styles.flex1}>
@@ -85,7 +113,10 @@ const Body = ({ _this }) => {
                 onMapReady={() => onMapReadyHandler()}
                 loadingEnabled={true}
                 showsCompass={false}
-                //onUserLocationChange={_this.onUserLocationChange}
+                /*onUserLocationChange={(location) => {
+                    //_this.tempUserLocationChange(location.nativeEvent.coordinate)
+                    //console.log(location.nativeEvent.coordinate)
+                }}*/
                 rotateEnabled={false}
                 //showsMyLocationButton={true}
                 initialRegion={{ ..._this.rideDetails.source, latitudeDelta: 0.02, longitudeDelta: 0.02, }}
@@ -108,16 +139,19 @@ const Body = ({ _this }) => {
                     <Marker.Animated
                         ref={driverMarker}
                         flat={true}
-                        anchor={{ x: 1, y: 0.5 }}
+                        anchor={{ x: 0.5, y: 0.5 }}
                         identifier='driver'
                         coordinate={driverMarkerInitialRegion}
                         title={_this.driverVehicleDetails.driver_details.name}
+                        style={{ opacity: initialTowMarkerOpacity }}
                     >
-                        <Image source={icon} style={[styles.markerImage, {
+                        <Animated.View style={[styles.marker, {
                             transform: [{
-                                rotate: _this.driverVehicleDetails.driver_details.location.heading === undefined ? '0deg' : `${_this.driverVehicleDetails.driver_details.location.heading + 270}deg`
+                                rotate: spin
                             }]
-                        }]} />
+                        }]}>
+                            <Image source={tow} style={styles.markerImage} />
+                        </Animated.View>
                     </Marker.Animated>
                 }
                 {_this.driverVehicleDetails && _this.rideDetails.ride_status == 'accepted' &&
@@ -134,7 +168,7 @@ const Body = ({ _this }) => {
                             //console.log(result.distance,result.duration)
                         }}
                     />
-                }
+                    }
                 <MapViewDirections
                     origin={{ latitude: _this.rideDetails.source.latitude, longitude: _this.rideDetails.source.longitude }}
                     destination={{ latitude: _this.rideDetails.destination.latitude, longitude: _this.rideDetails.destination.longitude }}
@@ -156,4 +190,5 @@ export default Body
 
 /*
 coordinate={{ latitude: _this.driverVehicleDetails.driver_details.location.coordinates[1], longitude: _this.driverVehicleDetails.driver_details.location.coordinates[0] }}
+_this.driverVehicleDetails.driver_details.location.heading === undefined ? '0deg' : `${_this.driverVehicleDetails.driver_details.location.heading + 270}deg`
 */

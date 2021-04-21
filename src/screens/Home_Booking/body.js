@@ -16,10 +16,17 @@ import MapViewDirections from 'react-native-maps-directions'
 import BottomPopup from './bottomPopup'
 import { tow_bike, tow_truck, tow_private } from 'src/assets'
 
+const EDGE_PADDING = {
+    top: Mixins.scaleSize(50),
+    right: Mixins.scaleSize(50),
+    bottom: Mixins.scaleSize(50),
+    left: Mixins.scaleSize(50)
+}
+
 const Body = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
     const onMapReadyHandler = useCallback(() => {
-        _this.map.current.fitToSuppliedMarkers(['source', 'destination', 'driver'])
+        _this.map.current.fitToSuppliedMarkers(['source', 'destination', 'driver'],{ edgePadding: EDGE_PADDING, animated: true })
     }, [_this.map, _this.selectedDriver])
 
     const icon = _this.selectedDriver && _this.selectedDriver.vehicle_details.type == 'TRUCK' ? tow_truck : _this.selectedDriver && _this.selectedDriver.vehicle_details.type == 'BIKE' ? tow_bike : tow_private

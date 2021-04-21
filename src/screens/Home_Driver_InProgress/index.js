@@ -29,7 +29,6 @@ const InProgress = ({ route, navigation }) => {
   const map = useRef(null)
   const [isMapLoaded, setIsMapLoaded] = useState(false)
   const [currentLocation, setCurrentLocation] = useState(null)
-  const [popupStep, setPopupStep] = useState(0)
   const [, forceRender] = useReducer(x => x + 1, 0);
 
 
@@ -100,6 +99,11 @@ const InProgress = ({ route, navigation }) => {
     )
   }
 
+  const callUser = () => {
+    let phoneNumber = `tel:${rideDetails.user.mobile}`
+    Linking.openURL(phoneNumber);
+  };
+
   const navigationMode = ({ lat, lng }) => {
     const scheme = Platform.select({ ios: `maps://app?saddr=${currentLocation.latitude}+${currentLocation.longitude}&daddr=`, android: 'google.navigation:q=' });
     const url = Platform.select({
@@ -112,7 +116,7 @@ const InProgress = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, currentLocation, navigationMode }} />
+      <Body _this={{ navigation, map, rideDetails, currentLocation, navigationMode, callUser }} />
     </Container>
   )
 }

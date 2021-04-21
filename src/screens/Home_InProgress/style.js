@@ -119,10 +119,16 @@ const style = ({ Colors }) => (StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    marker: {
+        width: Mixins.scaleSize(35),
+        height: Mixins.scaleSize(35),
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     markerImage: {
         width: Mixins.scaleSize(35),
-        height: Mixins.scaleSize(18),
-        resizeMode: 'contain'
+        height: Mixins.scaleSize(20),
+        resizeMode: 'stretch'
     }
 })
 );
