@@ -11,22 +11,22 @@ import style from './style'
 import { Mixins, Typography } from 'src/styles'
 import { GOOGLE_MAP_API_KEY } from 'src/config'
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion, Callout } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions'
 import BottomPopup from './bottomPopup'
-import { tow_bike, tow_truck, tow_private } from 'src/assets'
 
 const EDGE_PADDING = {
     top: Mixins.scaleSize(50),
     right: Mixins.scaleSize(50),
     bottom: Mixins.scaleSize(50),
     left: Mixins.scaleSize(50)
-  }
+}
 
 const Body = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
     const onMapReadyHandler = useCallback(() => {
-        _this.map.current.fitToSuppliedMarkers(['source', 'destination'],{ edgePadding: EDGE_PADDING, animated: true })
+        _this.map.current.fitToSuppliedMarkers(['source', 'destination'], { edgePadding: EDGE_PADDING, animated: true })
     }, [_this.map])
 
     return (
@@ -72,19 +72,19 @@ const Body = ({ _this }) => {
                         //_this.setDriverDistanceTime({ distance: result.distance, duration: result.duration })
                     }}
                 />
-                {/*<MapViewDirections
-                    origin={{ latitude: _this.currentLocation.latitude, longitude: _this.currentLocation.longitude }}
-                    destination={{ latitude: _this.rideDetails.source.coordinates[1], longitude: _this.rideDetails.source.coordinates[0] }}
-                    apikey={GOOGLE_MAP_API_KEY}
-                    strokeWidth={4}
-                    strokeColor={Colors.ascent}
-                    optimizeWaypoints={false}
-                    onReady={result => {
-                        console.log('Result >> ',result.distance,result.duration)
-                        //_this.setDistanceTime({ distance: result.distance, duration: result.duration })
-                    }}
-                />*/}
             </MapView>
+            <View style={styles.navigationBar}>
+                <TouchableOpacity onPress={() => _this.rideDetails.ride_status == 'accepted' ? _this.navigationMode({lat: _this.rideDetails.source.coordinates[1], lng: _this.rideDetails.source.coordinates[0]}) : _this.navigationMode({lat: _this.rideDetails.destination.coordinates[1], lng: _this.rideDetails.destination.coordinates[0]})} style={[styles.flexRow, styles.callChatButton, styles.marginBottom10, styles.marginTop10]}>
+                    <View style={styles.callChatButtonIcon}>
+                        <Icon2 name='directions' size={Typography.FONT_SIZE_25} color={Colors.primary} />
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => null} style={[styles.flexRow, styles.callChatButton]}>
+                    <View style={styles.callChatButtonIcon}>
+                        <Icon name='locate' size={Typography.FONT_SIZE_25} color={Colors.primary} />
+                    </View>
+                </TouchableOpacity>
+            </View>
             <BottomPopup _this={_this} />
         </View>
     )

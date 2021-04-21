@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef, useReducer } from 'react';
 import {
   View,
   Text,
-  BackHandler
+  BackHandler,
+  Platform,
+  Linking
 } from 'react-native';
 import styles from './style'
 import Config from 'src/config'
@@ -26,7 +28,7 @@ const InProgress = ({ route, navigation }) => {
   const [rideDetails, setRideDetails] = useState(ride_details)
   const map = useRef(null)
   const [isMapLoaded, setIsMapLoaded] = useState(false)
-  const [currentLocation,setCurrentLocation] = useState(null)
+  const [currentLocation, setCurrentLocation] = useState(null)
   const [popupStep, setPopupStep] = useState(0)
   const [, forceRender] = useReducer(x => x + 1, 0);
 
@@ -43,10 +45,10 @@ const InProgress = ({ route, navigation }) => {
     }
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (socket)
-    socket.emit('update_driver_location', { driver_id: rideDetails.assigned_driver, location: currentLocation })
-  },[currentLocation])
+      socket.emit('update_driver_location', { driver_id: rideDetails.assigned_driver, location: currentLocation })
+  }, [currentLocation])
 
   /*
    * Socket Handler
@@ -55,7 +57,7 @@ const InProgress = ({ route, navigation }) => {
     socket = await API.SOCKET('/user-driver-inprogress')
     socket.on('connect', () => {
       socket.emit('initialize_driver', { ride_id: rideDetails._id }, (response) => {
-        setRideDetails(prev=>response)
+        setRideDetails(prev => response)
       })
     });
 
@@ -65,15 +67,25 @@ const InProgress = ({ route, navigation }) => {
   }
 
   const onLocationChange = () => {
+
+    Geolocation.getCurrentPosition(
+      pos => { setCurrentLocation({ heading: pos.coords.heading, latitude: pos.coords.latitude, longitude: pos.coords.longitude }) },
+      error => {
+        console.log('request permission ==>>', error)
+        setPermissionPopup(true)
+      }
+    )
+
+
     if (watchId)
       Geolocation.clearWatch(watchId);
     watchId = Geolocation.watchPosition(
       pos => {
         // Catch mocked data only for debugging
-        if(pos.mocked){
-          //console.log(pos)
-        setCurrentLocation({heading: pos.coords.heading, latitude: pos.coords.latitude, longitude: pos.coords.longitude})
-        }
+        //if (pos.mocked) {
+        //console.log(pos)
+        setCurrentLocation({ heading: pos.coords.heading, latitude: pos.coords.latitude, longitude: pos.coords.longitude })
+        //}
       },
       e => {
         console.log('watchId Error => ', e)
@@ -88,19 +100,19 @@ const InProgress = ({ route, navigation }) => {
     )
   }
 
-  const cancelRideRequest = async () => {
-    socket.emit('cancel_ride_request', { ride_id: rideDetails._id }, (response) => {
-      if (response) {
-        setPopupStep(prev => 0)
-        Ddux.setCache('ride', null)
-      }
-    })
+  const navigationMode = ({ lat, lng }) => {
+    const scheme = Platform.select({ ios: `maps://app?saddr=${currentLocation.latitude}+${currentLocation.longitude}&daddr=`, android: 'google.navigation:q=' });
+    const url = Platform.select({
+      ios: `${scheme}${lat}+${lng}`,
+      android: `${scheme}${lat}+${lng}`
+    });
+    Linking.openURL(url)
   }
 
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, currentLocation }} />
+      <Body _this={{ navigation, map, rideDetails, currentLocation, navigationMode }} />
     </Container>
   )
 }

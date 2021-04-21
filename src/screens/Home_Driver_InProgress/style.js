@@ -119,6 +119,15 @@ const style = ({ Colors }) => (StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    navigationBar:{
+        width: Mixins.scaleSize(60),
+        height: Mixins.scaleSize(150),
+        //backgroundColor: Colors.black,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        alignItems: 'center'
+    }
 })
 );
 
