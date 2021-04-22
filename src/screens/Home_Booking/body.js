@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion, Callout } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions'
 import BottomPopup from './bottomPopup'
-import { tow_bike, tow_truck, tow_private } from 'src/assets'
+import { tow } from 'src/assets'
 
 const EDGE_PADDING = {
     top: Mixins.scaleSize(50),
@@ -28,8 +28,6 @@ const Body = ({ _this }) => {
     const onMapReadyHandler = useCallback(() => {
         _this.map.current.fitToSuppliedMarkers(['source', 'destination', 'driver'],{ edgePadding: EDGE_PADDING, animated: true })
     }, [_this.map, _this.selectedDriver])
-
-    const icon = _this.selectedDriver && _this.selectedDriver.vehicle_details.type == 'TRUCK' ? tow_truck : _this.selectedDriver && _this.selectedDriver.vehicle_details.type == 'BIKE' ? tow_bike : tow_private
 
     return (
         <View style={styles.flex1}>
@@ -74,7 +72,7 @@ const Body = ({ _this }) => {
                         }}
                     >
                         <View style={styles.marker}>
-                            <Image source={icon} style={styles.markerImage} />
+                            <Image source={tow} style={styles.markerImage} />
                         </View>
                     </Marker>
                 }

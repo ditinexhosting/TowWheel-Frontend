@@ -58,9 +58,7 @@ const Home = ({ navigation }) => {
                 setRideRequests(prev => response.nearest_ride_requests)
             })
         });
-        socket.on('initial_ride_requests', (data) => {
-            
-        })
+        
         socket.on('disconnect', () => {
 
         });
@@ -75,6 +73,7 @@ const Home = ({ navigation }) => {
                             if (item._id == selectedRideRequest._id) {
                                 item.available_drivers = item.available_drivers.filter(driver => driver !== userDetails.driver_details)
                             }
+                            setSelectedRideRequest(prev=>item)
                             return item
                         })
                     })
@@ -90,6 +89,7 @@ const Home = ({ navigation }) => {
                             if (item._id == selectedRideRequest._id) {
                                 item.available_drivers.push(userDetails.driver_details)
                             }
+                            setSelectedRideRequest(prev=>item)
                             return item
                         })
                     })

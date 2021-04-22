@@ -76,10 +76,11 @@ const InProgress = ({ route, navigation }) => {
   }
 
   const cancelRideRequest = async () => {
-    socket.emit('cancel_ride_request', { ride_id: rideDetails._id }, (response) => {
+    socket.emit('cancel_ride_request', { ride_id: rideDetails._id, driver_id: driverVehicleDetails.driver_details._id }, (response) => {
       if (response) {
         navigation.pop()
-        Ddux.setCache('ride', null)
+        setTimeout(()=>Ddux.setCache('ride', null),1000)
+        
       }
     })
   }
