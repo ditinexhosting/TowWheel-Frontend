@@ -65,6 +65,12 @@ const InProgress = ({ route, navigation }) => {
     });
   }
 
+  const startTowRide = async () => {
+    socket.emit('start_tow_ride', { ride_id: rideDetails._id }, (response) => {
+      setRideDetails(prev => ({...prev,ride_status:'started'}))
+    })
+  }
+
   const onLocationChange = () => {
 
     Geolocation.getCurrentPosition(
@@ -116,7 +122,7 @@ const InProgress = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, currentLocation, navigationMode, callUser }} />
+      <Body _this={{ navigation, map, rideDetails, currentLocation, navigationMode, callUser, startTowRide }} />
     </Container>
   )
 }

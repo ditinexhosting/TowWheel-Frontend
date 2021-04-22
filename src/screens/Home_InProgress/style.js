@@ -32,7 +32,8 @@ const style = ({ Colors }) => (StyleSheet.create({
         fontSize: Typography.FONT_SIZE_15,
         color: Colors.text,
         fontWeight: 'bold',
-        marginBottom: Spacing.SCALE_5
+        marginBottom: Spacing.SCALE_5,
+        textAlign: 'center'
     },
     towImageContainer:{
         backgroundColor: Colors.white,

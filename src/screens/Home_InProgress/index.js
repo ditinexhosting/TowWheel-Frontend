@@ -66,6 +66,10 @@ const InProgress = ({ route, navigation }) => {
       })
     })
 
+    socket.on('start_tow_ride',(response) => {
+      Ddux.setCache('ride',{...rideDetails,ride_status: 'started'})
+    })
+
     socket.on('disconnect', () => {
 
     });
@@ -75,8 +79,7 @@ const InProgress = ({ route, navigation }) => {
     socket.emit('cancel_ride_request', { ride_id: rideDetails._id, driver_id: rideDetails.assigned_driver }, (response) => {
       if (response) {
         navigation.pop()
-        setTimeout(()=>Ddux.setCache('ride', null),500)
-        
+        setTimeout(()=>Ddux.setCache('ride', null),300)
       }
     })
   }

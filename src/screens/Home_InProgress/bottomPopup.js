@@ -73,15 +73,15 @@ const TowSearchProgress = ({ _this }) => {
             </View>
 
             <View style={[styles.flex1, styles.centerAll]}>
-                <Text style={styles.popupTitle}>Tow arriving in {parseInt(_this.arrivingIn)} min ..... </Text>
+                <Text style={styles.popupTitle}>{_this.rideDetails.ride_status == 'accepted' ? `Tow arriving in${parseInt(_this.arrivingIn)} min .....` : 'Tow ride started ...\n Please complete payment by cash.'} </Text>
             </View>
 
-            <TouchableOpacity onPress={() => _this.cancelRideRequest()} style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
+            {_this.rideDetails.ride_status == 'accepted' && <TouchableOpacity onPress={() => _this.cancelRideRequest()} style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
                 <Text style={styles.continueButtonText}>Cancel Request</Text>
                 <View style={styles.continueButtonIcon}>
                     <Icon name='close' size={Typography.FONT_SIZE_25} color={Colors.primary} />
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </View>
     )
 
