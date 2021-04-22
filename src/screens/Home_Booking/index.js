@@ -85,7 +85,8 @@ const Booking = ({ route, navigation }) => {
 
   const hireMe = async () => {
     Ddux.setData('loading', true)
-    socket.emit('hire_driver', { active_vehicle: selectedDriver.active_vehicle, driver_id: selectedDriver._id }, (response)=>{
+
+    socket.emit('hire_driver', { active_vehicle: selectedDriver.active_vehicle, driver_id: selectedDriver._id, cost: parseFloat(selectedDriver.vehicle_details.cost_per_km * rideDetails.distance).toFixed(2) }, (response)=>{
       Ddux.setData('loading', false)
       if(response){
         if(response == false)
@@ -95,9 +96,9 @@ const Booking = ({ route, navigation }) => {
           destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
           source: { address: response.source.address, latitude: response.source.coordinates[1], longitude: response.source.coordinates[0] }
       })
-        navigation.pop()
+        navigation.replace('Home_InProgress')
       }
-    })  
+    }) 
   }
 
   const createRideRequest = async () => {

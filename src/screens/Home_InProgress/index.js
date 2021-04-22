@@ -28,10 +28,6 @@ const InProgress = ({ route, navigation }) => {
   const [arrivingIn, setArrivingIn] = useState('0')
   const [, forceRender] = useReducer(x => x + 1, 0);
 
-  useEffect(()=>{
-    //console.log('Driver details changed >> ',driverVehicleDetails)
-  },[driverVehicleDetails])
-
 
   useEffect(() => {
     if (isFocused) {
@@ -76,10 +72,10 @@ const InProgress = ({ route, navigation }) => {
   }
 
   const cancelRideRequest = async () => {
-    socket.emit('cancel_ride_request', { ride_id: rideDetails._id, driver_id: driverVehicleDetails.driver_details._id }, (response) => {
+    socket.emit('cancel_ride_request', { ride_id: rideDetails._id, driver_id: rideDetails.assigned_driver }, (response) => {
       if (response) {
         navigation.pop()
-        setTimeout(()=>Ddux.setCache('ride', null),1000)
+        setTimeout(()=>Ddux.setCache('ride', null),500)
         
       }
     })
