@@ -53,12 +53,21 @@ const Home = ({ navigation }) => {
     const socketHandler = async (currentLocation) => {
         socket = await API.SOCKET('/driver-ride-request')
         socket.on('connect', () => {
-            socket.emit('initialize', { _id: userDetails.driver_details, location: currentLocation },(response)=>{
+            socket.emit('initialize', { _id: userDetails.driver_details, location: currentLocation }, (response) => {
                 setIsActiveRideExists(response.active_ride)
+                setSelectedRideRequest(null)
                 setRideRequests(prev => response.nearest_ride_requests)
             })
         });
-        
+
+        socket.on('new_booking_update', (response) => {
+            socket.emit('initialize', { _id: userDetails.driver_details, location: currentLocation }, (response) => {
+                setSelectedRideRequest(null)
+                setIsActiveRideExists(response.active_ride)
+                setRideRequests(prev => response.nearest_ride_requests)
+            })
+        })
+
         socket.on('disconnect', () => {
 
         });
@@ -73,7 +82,7 @@ const Home = ({ navigation }) => {
                             if (item._id == selectedRideRequest._id) {
                                 item.available_drivers = item.available_drivers.filter(driver => driver !== userDetails.driver_details)
                             }
-                            setSelectedRideRequest(prev=>item)
+                            setSelectedRideRequest(prev => item)
                             return item
                         })
                     })
@@ -89,7 +98,7 @@ const Home = ({ navigation }) => {
                             if (item._id == selectedRideRequest._id) {
                                 item.available_drivers.push(userDetails.driver_details)
                             }
-                            setSelectedRideRequest(prev=>item)
+                            setSelectedRideRequest(prev => item)
                             return item
                         })
                     })
@@ -201,19 +210,19 @@ const Home = ({ navigation }) => {
                 )
             }
         } catch (err) {
-    console.warn(err);
-}
+            console.warn(err);
+        }
     };
 
-return (
-    <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
-        <SafeAreaView style={styles.flex1}>
-            <Header _this={{ navigation }} />
-            <Body _this={{ map, currentLocation, navigation, setIsMapLoaded, rideRequests, selectedRideRequest, setSelectedRideRequest, processTowRequest, userDetails, isActiveRideExists }} />
-            <Popup _this={{ permissionPopup, setPermissionPopup, requestLocationPermission }} />
-        </SafeAreaView>
-    </Container>
-)
+    return (
+        <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
+            <SafeAreaView style={styles.flex1}>
+                <Header _this={{ navigation }} />
+                <Body _this={{ map, currentLocation, navigation, setIsMapLoaded, rideRequests, selectedRideRequest, setSelectedRideRequest, processTowRequest, userDetails, isActiveRideExists }} />
+                <Popup _this={{ permissionPopup, setPermissionPopup, requestLocationPermission }} />
+            </SafeAreaView>
+        </Container>
+    )
 }
 
 export default Home

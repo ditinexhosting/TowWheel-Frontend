@@ -88,7 +88,7 @@ const TowSearchProgress = ({ _this }) => {
                 </View>
             </View>
 
-            <TouchableOpacity onPress={() => _this.startTowRide()} style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
+            <TouchableOpacity onPress={() => _this.rideDetails.ride_status == 'accepted' ? _this.startTowRide() : _this.completeTowRide() } style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
                 <Text style={styles.continueButtonText}>{_this.rideDetails.ride_status == 'accepted' ? 'Start Tow Ride': 'Ride & Payment Completed'}</Text>
                 <View style={styles.continueButtonIcon}>
                     <Icon name='ios-arrow-forward-sharp' size={Typography.FONT_SIZE_25} color={Colors.primary} />

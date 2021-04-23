@@ -71,6 +71,13 @@ const InProgress = ({ route, navigation }) => {
     })
   }
 
+  const completeTowRide = async () => {
+    socket.emit('complete_ride', { ride_id: rideDetails._id }, (response) => {
+      // TODO : Add option for user to leave review and feedback for driver.
+      navigation.pop()
+    })
+  }
+
   const onLocationChange = () => {
 
     Geolocation.getCurrentPosition(
@@ -122,7 +129,7 @@ const InProgress = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, currentLocation, navigationMode, callUser, startTowRide }} />
+      <Body _this={{ navigation, map, rideDetails, currentLocation, navigationMode, callUser, startTowRide, completeTowRide }} />
     </Container>
   )
 }

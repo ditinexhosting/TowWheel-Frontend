@@ -70,6 +70,11 @@ const InProgress = ({ route, navigation }) => {
       Ddux.setCache('ride',{...rideDetails,ride_status: 'started'})
     })
 
+    socket.on('complete_ride',(response) => {
+      navigation.pop()
+      setTimeout(()=> Ddux.setCache('ride',null) ,1000)
+    })
+
     socket.on('disconnect', () => {
 
     });
