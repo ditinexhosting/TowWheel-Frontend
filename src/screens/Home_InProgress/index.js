@@ -72,7 +72,7 @@ const InProgress = ({ route, navigation }) => {
 
     socket.on('complete_ride',(response) => {
       navigation.pop()
-      setTimeout(()=> Ddux.setCache('ride',null) ,1000)
+      setTimeout(()=> Ddux.setCache('ride',null) ,2000)
     })
 
     socket.on('disconnect', () => {

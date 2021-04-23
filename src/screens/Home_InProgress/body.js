@@ -63,18 +63,20 @@ const Body = ({ _this }) => {
                         }, 3000)
                 }
             } else {
-                driverMarkerInitialRegion.timing(newCoordinate, {
-                    useNativeDriver: false
-                }).start(initialTowMarkerOpacity == 0 && setTimeout(() => {
-                    setInitialTowMarkerOpacity(1)
-                }, 3000))
+                driverMarkerInitialRegion.timing(newCoordinate,{useNativeDriver: true}).start(() => {
+                    if (initialTowMarkerOpacity == 0)
+                        setTimeout(() => {
+                            setInitialTowMarkerOpacity(1)
+                        }, 3000)
+                })
             }
 
             Animated.timing(
                 spinValue,
                 {
-                    toValue: ( _this.driverVehicleDetails.driver_details.location.heading + 270) % 360,
+                    toValue: (_this.driverVehicleDetails.driver_details.location.heading + 270) % 360,
                     duration: 2000,
+                    useNativeDriver: true
                 }
             ).start();
 
@@ -168,7 +170,7 @@ const Body = ({ _this }) => {
                             //console.log(result.distance,result.duration)
                         }}
                     />
-                    }
+                }
                 <MapViewDirections
                     origin={{ latitude: _this.rideDetails.source.latitude, longitude: _this.rideDetails.source.longitude }}
                     destination={{ latitude: _this.rideDetails.destination.latitude, longitude: _this.rideDetails.destination.longitude }}

@@ -32,14 +32,19 @@ const Booking = ({ route, navigation }) => {
   const [, forceRender] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
-    Geocoder.from(source)
-      .then(data => {
-        source.address = data.results[0].formatted_address
-        forceRender()
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    try {
+      Geocoder.from(source)
+        .then(data => {
+          source.address = data.results[0].formatted_address
+          forceRender()
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+    catch (e) {
+      //console.log('>>> useEffect Geocoder')
+    }
   }, [])
 
 
@@ -58,30 +63,35 @@ const Booking = ({ route, navigation }) => {
    * Socket Handler
    */
   const socketHandler = async () => {
-    socket = await API.SOCKET('/user-ride-request')
-    socket.on('connect', () => {
-      socket.emit('initialize', { ride_id: rideDetails._id }, (response) => {
-        Ddux.setCache('ride', {
-          ...response,
-          destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
-          source: { address: response.source.address, latitude: response.source.coordinates[1], longitude: response.source.coordinates[0] }
+    try {
+      socket = await API.SOCKET('/user-ride-request')
+      socket.on('connect', () => {
+        socket.emit('initialize', { ride_id: rideDetails._id }, (response) => {
+          Ddux.setCache('ride', {
+            ...response,
+            destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
+            source: { address: response.source.address, latitude: response.source.coordinates[1], longitude: response.source.coordinates[0] }
+          })
+        })
+      });
+
+      socket.on('new_driver_update', (response) => {
+        socket.emit('initialize', { ride_id: rideDetails._id }, (response) => {
+          Ddux.setCache('ride', {
+            ...response,
+            destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
+            source: { address: response.source.address, latitude: response.source.coordinates[1], longitude: response.source.coordinates[0] }
+          })
         })
       })
-    });
 
-    socket.on('new_driver_update', (response) => {
-      socket.emit('initialize', { ride_id: rideDetails._id }, (response) => {
-        Ddux.setCache('ride', {
-          ...response,
-          destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
-          source: { address: response.source.address, latitude: response.source.coordinates[1], longitude: response.source.coordinates[0] }
-        })
-      })
-    })
+      socket.on('disconnect', () => {
 
-    socket.on('disconnect', () => {
-
-    });
+      });
+    }
+    catch (e) {
+      //console.log('>>> Socket Initialize')
+    }
   }
 
   const cancelRideRequest = async () => {
