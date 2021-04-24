@@ -41,8 +41,8 @@ const Body = ({ _this }) => {
     const driverMarker = useRef(null)
 
     const driverMarkerInitialRegion = useRef(new AnimatedRegion({
-        latitude: _this.rideDetails.source.latitude,
-        longitude: _this.rideDetails.source.longitude,
+        latitude: _this.rideDetails ? _this.rideDetails.source.latitude : 0,
+        longitude: _this.rideDetails ? _this.rideDetails.source.longitude : 0,
         latitudeDelta: 0.02,
         longitudeDelta: 0.02,
     })).current
@@ -104,7 +104,7 @@ const Body = ({ _this }) => {
         outputRange: ['0deg', '360deg']
     })
 
-    return (
+    return _this.rideDetails && (
         <View style={styles.flex1}>
             <MapView
                 style={styles.flex1}

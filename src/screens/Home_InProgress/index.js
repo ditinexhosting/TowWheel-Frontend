@@ -72,7 +72,7 @@ const InProgress = ({ route, navigation }) => {
 
     socket.on('complete_ride',(response) => {
       navigation.pop()
-      setTimeout(()=> Ddux.setCache('ride',null) ,2000)
+      setTimeout(()=> Ddux.setCache('ride',null) ,1500)
     })
 
     socket.on('disconnect', () => {
@@ -84,7 +84,7 @@ const InProgress = ({ route, navigation }) => {
     socket.emit('cancel_ride_request', { ride_id: rideDetails._id, driver_id: rideDetails.assigned_driver }, (response) => {
       if (response) {
         navigation.pop()
-        setTimeout(()=>Ddux.setCache('ride', null),300)
+        setTimeout(()=>Ddux.setCache('ride', null),1500)
       }
     })
   }

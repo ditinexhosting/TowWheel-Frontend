@@ -98,6 +98,7 @@ const Booking = ({ route, navigation }) => {
     socket.emit('cancel_ride_request', { ride_id: rideDetails._id }, (response) => {
       if (response) {
         setPopupStep(prev => 0)
+        setSelectedDriver(null)
         Ddux.setCache('ride', null)
       }
     })

@@ -60,6 +60,10 @@ const InProgress = ({ route, navigation }) => {
       })
     });
 
+    socket.on('cancel_ride_request', (response) => {
+      navigation.pop()
+    })
+
     socket.on('disconnect', () => {
 
     });
@@ -67,7 +71,7 @@ const InProgress = ({ route, navigation }) => {
 
   const startTowRide = async () => {
     socket.emit('start_tow_ride', { ride_id: rideDetails._id }, (response) => {
-      setRideDetails(prev => ({...prev,ride_status:'started'}))
+      setRideDetails(prev => ({ ...prev, ride_status: 'started' }))
     })
   }
 
