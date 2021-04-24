@@ -31,6 +31,7 @@ const Booking = ({ route, navigation }) => {
   const [driverDistanceTime, setDriverDistanceTime] = useState({ distance: null, duration: null })
   const [, forceRender] = useReducer(x => x + 1, 0);
 
+
   useEffect(() => {
     try {
       Geocoder.from(source)
@@ -77,6 +78,12 @@ const Booking = ({ route, navigation }) => {
 
       socket.on('new_driver_update', (response) => {
         socket.emit('initialize', { ride_id: rideDetails._id }, (response) => {
+          if(selectedDriver){
+            const isSelectedDriverStillAvailable =  response.available_drivers.filter(driver_id=>driver_id==selectedDriver._id)
+            if(isSelectedDriverStillAvailable.length < 1)
+            setSelectedDriver(null)
+          }
+
           Ddux.setCache('ride', {
             ...response,
             destination: { address: response.destination.address, latitude: response.destination.coordinates[1], longitude: response.destination.coordinates[0] },
