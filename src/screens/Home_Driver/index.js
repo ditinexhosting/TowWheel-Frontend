@@ -216,7 +216,7 @@ const Home = ({ navigation }) => {
 
     return (
         <Container isTransparentStatusBar={true} style={styles.fullHeightContainer}>
-            <SafeAreaView style={styles.flex1}>
+            <SafeAreaView style={[styles.flex1]}>
                 <Header _this={{ navigation }} />
                 <Body _this={{ map, currentLocation, navigation, setIsMapLoaded, rideRequests, selectedRideRequest, setSelectedRideRequest, processTowRequest, userDetails, isActiveRideExists }} />
                 <Popup _this={{ permissionPopup, setPermissionPopup, requestLocationPermission }} />

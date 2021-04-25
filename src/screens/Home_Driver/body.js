@@ -69,7 +69,7 @@ const Body = ({ _this }) => {
                             ListHeaderComponent={null}
                         />
                         {_this.selectedRideRequest &&
-                            <TouchableOpacity onPress={() => _this.processTowRequest()} style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
+                            <TouchableOpacity onPress={() => _this.processTowRequest()} style={[styles.marginBottom25, styles.flexRow, styles.continueButton]}>
                                 <Text style={styles.continueButtonText}>{isRideAccepted ? 'Decline Tow Request' : 'Accept Tow Request'}</Text>
                                 <View style={styles.continueButtonIcon}>
                                     <Icon name='ios-arrow-forward-sharp' size={Typography.FONT_SIZE_25} color={Colors.primary} />

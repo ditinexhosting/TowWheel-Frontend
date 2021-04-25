@@ -180,7 +180,8 @@ const Home = ({ navigation }) => {
                     error => {
                         console.log('request permission ==>>', error)
                         setPermissionPopup(true)
-                    }
+                    },
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
                 )
             }
 
@@ -194,7 +195,6 @@ const Home = ({ navigation }) => {
             let granted = true
             let always = await Geolocation.requestAuthorization('always')
             let whenInUse = await Geolocation.requestAuthorization('whenInUse')
-
             if (always !== 'granted' && whenInUse !== 'granted')
                 granted = false
 
@@ -206,7 +206,8 @@ const Home = ({ navigation }) => {
                     error => {
                         console.log('request permission ==>>', error)
                         setPermissionPopup(true)
-                    }
+                    },
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
                 )
             }
         } catch (err) {
