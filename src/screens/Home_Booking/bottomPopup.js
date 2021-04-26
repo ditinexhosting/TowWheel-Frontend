@@ -100,7 +100,7 @@ const TowSearchProgress = ({ _this }) => {
                 <Text style={styles.popupTitle}>Connecting to Tow Drivers ..... </Text>
             </View>}
 
-            <TouchableOpacity onPress={() => _this.cancelRideRequest()} style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
+            <TouchableOpacity onPress={() => _this.cancelRideRequest()} style={[styles.marginBottom20, styles.flexRow, styles.continueButton]}>
                 <Text style={styles.continueButtonText}>Cancel Request</Text>
                 <View style={styles.continueButtonIcon}>
                     <Icon name='close' size={Typography.FONT_SIZE_25} color={Colors.primary} />
@@ -148,7 +148,7 @@ const TowSelector = ({ _this }) => {
                     </View>
                 </View>
             </View>
-            <TouchableOpacity onPress={() => _this.createRideRequest()} style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
+            <TouchableOpacity onPress={() => _this.createRideRequest()} style={[styles.marginBottom20, styles.flexRow, styles.continueButton]}>
                 <Text style={styles.continueButtonText}>Continue</Text>
                 <View style={styles.continueButtonIcon}>
                     <Icon name='ios-arrow-forward-sharp' size={Typography.FONT_SIZE_25} color={Colors.primary} />

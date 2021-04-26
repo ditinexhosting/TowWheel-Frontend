@@ -60,6 +60,10 @@ const Booking = ({ route, navigation }) => {
     }
   }, [isFocused, popupStep]);
 
+  const handleDriverSelection = () => {
+    console.log('selection >>>', selectedDriver)
+  }
+
   /*
    * Socket Handler
    */
@@ -78,11 +82,15 @@ const Booking = ({ route, navigation }) => {
 
       socket.on('new_driver_update', (response) => {
         socket.emit('initialize', { ride_id: rideDetails._id }, (response) => {
-          if(selectedDriver){
-            const isSelectedDriverStillAvailable =  response.available_drivers.filter(driver_id=>driver_id==selectedDriver._id)
-            if(isSelectedDriverStillAvailable.length < 1)
-            setSelectedDriver(null)
-          }
+          setSelectedDriver(prev => {
+            if (!prev)
+              return prev
+            const isSelectedDriverStillAvailable = response.available_drivers.filter(driver_id => driver_id == selectedDriver._id)
+            if (isSelectedDriverStillAvailable.length < 1)
+              return null
+            else
+              return prev
+          })
 
           Ddux.setCache('ride', {
             ...response,
