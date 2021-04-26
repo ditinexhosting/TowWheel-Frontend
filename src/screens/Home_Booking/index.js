@@ -30,7 +30,12 @@ const Booking = ({ route, navigation }) => {
   const [selectedDriver, setSelectedDriver] = useState(null)
   const [driverDistanceTime, setDriverDistanceTime] = useState({ distance: null, duration: null })
   const [, forceRender] = useReducer(x => x + 1, 0);
+  const [isSortTypeCost, setIsSortTypeCost] = useState(false)
+  const [driverList, setDriverList] = useState(null)
 
+  useEffect(() => {
+    driver_sorting()
+  }, [rideDetails,isSortTypeCost])
 
   useEffect(() => {
     try {
@@ -62,6 +67,14 @@ const Booking = ({ route, navigation }) => {
 
   const handleDriverSelection = () => {
     console.log('selection >>>', selectedDriver)
+  }
+
+  const driver_sorting=async()=>{
+    var driver_list = rideDetails.available_drivers
+    if(isSortTypeCost)
+      await driver_list.sort((a, b) => (a.vehicle_details.cost_per_km > b.vehicle_details.cost_per_km) ? 1 : -1)
+    else await driver_list.sort((a, b) => (a.average_rating > b.average_rating) ? 1 : -1)
+    setDriverList(driver_list)
   }
 
   /*
@@ -166,7 +179,7 @@ const Booking = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, destination, map, setDistanceTime, source, towType, setTowType, popupStep, setPopupStep, createRideRequest, rideDetails, cancelRideRequest, selectedDriver, setSelectedDriver, driverDistanceTime, setDriverDistanceTime, hireMe }} />
+      <Body _this={{ navigation, destination, map, setDistanceTime, source, towType, setTowType, popupStep, setPopupStep, createRideRequest, rideDetails, cancelRideRequest, selectedDriver, setSelectedDriver, driverDistanceTime, setDriverDistanceTime, hireMe, isSortTypeCost, setIsSortTypeCost, driverList }} />
     </Container>
   )
 }
