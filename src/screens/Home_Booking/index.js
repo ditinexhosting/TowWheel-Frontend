@@ -70,7 +70,15 @@ const Booking = ({ route, navigation }) => {
   }
 
   const driver_sorting=async()=>{
-    var driver_list = rideDetails.available_drivers
+    let driver_list = rideDetails.available_drivers
+    for(let i=0;i<driver_list.length;i++)
+    {
+      let rating = 0
+      for(let k = 0;k<driver_list[i].reviews.length;k++){
+        rating += driver_list[i].reviews[k].rating
+      }
+      driver_list[i].average_rating = parseFloat(rating / driver_list[i].reviews.length || 0).toFixed(1)
+    }
     if(isSortTypeCost)
       await driver_list.sort((a, b) => (a.vehicle_details.cost_per_km > b.vehicle_details.cost_per_km) ? 1 : -1)
     else await driver_list.sort((a, b) => (a.average_rating > b.average_rating) ? 1 : -1)
