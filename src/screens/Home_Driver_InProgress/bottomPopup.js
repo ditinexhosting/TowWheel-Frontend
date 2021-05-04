@@ -63,7 +63,7 @@ const TowSearchProgress = ({ _this }) => {
                             <Icon name='ios-call' size={Typography.FONT_SIZE_25} color={Colors.primary} />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => null} style={[styles.flexRow, styles.callChatButton]}>
+                    <TouchableOpacity onPress={() => _this.navigation.navigate('Chat')} style={[styles.flexRow, styles.callChatButton]}>
                         <View style={styles.callChatButtonIcon}>
                             <Icon name='chatbubbles-sharp' size={Typography.FONT_SIZE_25} color={Colors.primary} />
                         </View>

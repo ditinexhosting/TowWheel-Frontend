@@ -33,7 +33,6 @@ const BottomPopup = ({ _this }) => {
 
 const TowSearchProgress = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
-    
 
     return _this.rideDetails && (
         <View style={styles.content}>
@@ -64,7 +63,7 @@ const TowSearchProgress = ({ _this }) => {
                             <Icon name='ios-call' size={Typography.FONT_SIZE_25} color={Colors.primary} />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => null} style={[styles.flexRow, styles.callChatButton]}>
+                    <TouchableOpacity onPress={() => _this.navigation.navigate('Chat',{ name: _this.driverVehicleDetails.driver_details.name, partner_id: _this.driverVehicleDetails.driver_details._id })} style={[styles.flexRow, styles.callChatButton]}>
                         <View style={styles.callChatButtonIcon}>
                             <Icon name='chatbubbles-sharp' size={Typography.FONT_SIZE_25} color={Colors.primary} />
                         </View>
@@ -73,7 +72,7 @@ const TowSearchProgress = ({ _this }) => {
             </View>
 
             <View style={[styles.flex1, styles.centerAll]}>
-                <Text style={styles.popupTitle}>{_this.rideDetails.ride_status == 'accepted' ? `Tow arriving in${parseInt(_this.arrivingIn)} min .....` : 'Tow ride started ...\n Please complete payment by cash.'} </Text>
+                <Text style={styles.popupTitle}>{_this.rideDetails.ride_status == 'accepted' ? `Tow arriving in ${parseInt(_this.arrivingIn)} min .....` : 'Tow ride started ...\n Please complete payment by cash.'} </Text>
             </View>
 
             {_this.rideDetails.ride_status == 'accepted' && <TouchableOpacity onPress={() => _this.cancelRideRequest()} style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
