@@ -26,6 +26,7 @@ const InProgress = ({ route, navigation }) => {
   const map = useRef(null)
   const [driverVehicleDetails, setDriverVehicleDetails] = useState(null)
   const [arrivingIn, setArrivingIn] = useState('0')
+  const [newMessageCount, setNewMessageCount] = useState(0)
   const [, forceRender] = useReducer(x => x + 1, 0);
 
 
@@ -66,6 +67,13 @@ const InProgress = ({ route, navigation }) => {
       })
     })
 
+    socket.on('new_message', (data) => {
+      if(data.sender !== userDetails._id){
+      setNewMessageCount(prev=>prev+1)
+      Toast.show({ type: 'info', message: 'New Message : '+data.message })
+      }
+    })
+
     socket.on('start_tow_ride',(response) => {
       Ddux.setCache('ride',{...rideDetails,ride_status: 'started'})
     })
@@ -98,7 +106,7 @@ const InProgress = ({ route, navigation }) => {
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails, arrivingIn, setArrivingIn, cancelRideRequest, callDriver }} />
+      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails, arrivingIn, setArrivingIn, cancelRideRequest, callDriver, newMessageCount, setNewMessageCount }} />
     </Container>
   )
 }
