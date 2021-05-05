@@ -68,17 +68,17 @@ const TowSearchProgress = ({ _this }) => {
                     <Icon name='time' size={Typography.FONT_SIZE_22} color={Colors.black} />
                     <Text style={styles.distance}>{parseFloat(_this.rideDetails.time / 60).toFixed(1)} hr</Text>
                 </View>
-                <View style={[styles.flexRow, styles.alignCenter]}>
-                    <Icon2 name='toggle-on' size={Typography.FONT_SIZE_25} color={Colors.primary} />
-                    <Text style={styles.distance}> Popularity</Text>
-                </View>
+                <TouchableOpacity onPress={()=>_this.setIsSortTypeCost(!_this.isSortTypeCost)} style={[styles.flexRow, styles.alignCenter,styles.toggle_button]}>
+                    <Icon2 name={_this.isSortTypeCost ? 'toggle-on': 'toggle-off'} size={Typography.FONT_SIZE_25} color={Colors.primary} />
+                    <Text style={styles.distance}> By {_this.isSortTypeCost ? 'Cost':'Popularity'}</Text>
+                </TouchableOpacity>
             </View>
 
-            {_this.rideDetails.available_drivers.length > 0 &&
+            {_this.driverList && _this.driverList.length > 0 &&
                 <>
                     <FlatList
                         //contentContainerStyle={styles.flatlist}
-                        data={_this.rideDetails.available_drivers}
+                        data={_this.driverList}
                         renderItem={renderItem}
                         style={[styles.fullWidth]}
                         ItemSeparatorComponent={null}
