@@ -26,7 +26,7 @@ const ChatInputBox = ({ sendMessage }) => {
                 maxNumOfLines={4}
             />
 
-            <TouchableOpacity onPress={() => sendMessage(message)}>
+            <TouchableOpacity onPress={() => sendMessage(message,setMessage)}>
                 <View style={styles.sendButton}>
                     <Icon name='send-o' size={20} color={Colors.white} />
                 </View>

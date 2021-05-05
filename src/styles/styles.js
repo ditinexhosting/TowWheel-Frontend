@@ -161,6 +161,10 @@ const styles = {
         borderRadius: 100,
         elevation: 5
     },
+    bottomChatContentOffset:{
+        height: Mixins.scaleSize(20),
+        width: 100,
+    }
 };
 
 export default styles

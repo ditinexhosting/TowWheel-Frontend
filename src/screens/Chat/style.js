@@ -42,6 +42,49 @@ const style = ({ Colors }) => (StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Colors.black,
+    },
+    sendContainer:{
+        paddingLeft: Mixins.scaleSize(50)
+    },
+    sendBubble:{
+        backgroundColor: Colors.black,
+        alignSelf: 'flex-end',
+        minWidth: Mixins.scaleSize(80),
+        padding: Spacing.SCALE_8,
+        borderRadius: Spacing.SCALE_14,
+        borderBottomRightRadius: 0
+    },
+    sendText:{
+        color: Colors.white,
+        fontSize: Typography.FONT_SIZE_17
+    },
+    receiveContainer:{
+        paddingRight: Mixins.scaleSize(50)
+    },
+    receiveBubble:{
+        backgroundColor: Colors.white,
+        alignSelf: 'flex-start',
+        minWidth: Mixins.scaleSize(80),
+        padding: Spacing.SCALE_8,
+        borderRadius: Spacing.SCALE_14,
+        borderBottomLeftRadius: 0
+    },
+    receiveText:{
+        color: Colors.black,
+        fontSize: Typography.FONT_SIZE_17
+    },
+    chatTimeContainer:{
+        alignSelf: 'flex-end',
+        flexDirection: 'row'
+    },
+    chatTime:{
+        color: Colors.muted_text,
+        fontSize: Typography.FONT_SIZE_12
+    },
+    chatDeliveryIcon:{
+        marginTop: Spacing.SCALE_4,
+        color: Colors.muted_text,
+        fontSize: Typography.FONT_SIZE_12
     }
 })
 );

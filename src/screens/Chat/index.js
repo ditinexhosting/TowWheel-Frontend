@@ -25,12 +25,40 @@ const Chat = ({ route, navigation }) => {
   const userDetails = Ddux.cache('user')
 
   const [chatData,setChatData] = useState([])
+
+  useEffect(()=>{
+    socketHandler()
+  },[])
+
+
+  /*
+   * Socket Handler
+   */
+  const socketHandler = async () => {
+    socket = await API.SOCKET('/live-chat')
+    socket.on('connect', () => {
+      socket.emit('initialize_chat', { user_id: userDetails._id, partner_id: partner_id }, (response) => {
+        setChatData(prev => response)
+      })
+    });
+
+    socket.on('disconnect', () => {
+
+    });
+  }
+
+  const sendMessage = async (message,setMessage)=>{
+    setMessage('')
+    socket.emit('new_message', message, response=>{
+
+    })
+  }
   
   
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation, name }} />
-      <Body _this={{ navigation, chatData }} />
+      <Body _this={{ navigation, userDetails, chatData, sendMessage }} />
     </Container>
   )
 }
