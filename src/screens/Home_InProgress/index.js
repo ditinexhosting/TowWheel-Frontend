@@ -52,6 +52,7 @@ const InProgress = ({ route, navigation }) => {
           ...rideDetails,
           ride_status: response.ride_status
         })
+        setNewMessageCount(response.unread_chat_count)
         setDriverVehicleDetails((prev)=>({driver_details: {...response.assigned_driver,...response.driver_details}, vehicle_details: response.assigned_vehicle}))
       })
     });

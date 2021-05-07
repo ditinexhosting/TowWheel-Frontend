@@ -57,6 +57,7 @@ const InProgress = ({ route, navigation }) => {
     socket = await API.SOCKET('/user-driver-inprogress')
     socket.on('connect', () => {
       socket.emit('initialize_driver', { ride_id: rideDetails._id }, (response) => {
+        setNewMessageCount(response.unread_chat_count)
         setRideDetails(prev => response)
       })
     });
