@@ -70,7 +70,7 @@ const Booking = ({ route, navigation }) => {
   }
 
   const driver_sorting=async()=>{
-    let driver_list = rideDetails.available_drivers
+    let driver_list = [...rideDetails.available_drivers]
     for(let i=0;i<driver_list.length;i++)
     {
       let rating = 0
@@ -81,7 +81,7 @@ const Booking = ({ route, navigation }) => {
     }
     if(isSortTypeCost)
       await driver_list.sort((a, b) => (a.vehicle_details.cost_per_km > b.vehicle_details.cost_per_km) ? 1 : -1)
-    else await driver_list.sort((a, b) => (a.average_rating > b.average_rating) ? 1 : -1)
+    else await driver_list.sort((a, b) => a.average_rating < b.average_rating ? 1 : -1)
     setDriverList(driver_list)
   }
 
