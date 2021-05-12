@@ -120,6 +120,7 @@ const Home = ({ navigation }) => {
 
     useEffect(() => {
         if (isFocused && isMapLoaded) {
+            setIsActiveRideExists(null)
             requestLocationPermission()
         }
 

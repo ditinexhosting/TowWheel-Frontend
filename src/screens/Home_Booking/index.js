@@ -34,7 +34,8 @@ const Booking = ({ route, navigation }) => {
   const [driverList, setDriverList] = useState(null)
 
   useEffect(() => {
-    driver_sorting()
+    if(rideDetails && rideDetails.available_drivers)
+      driver_sorting()
   }, [rideDetails,isSortTypeCost])
 
   useEffect(() => {
@@ -64,10 +65,6 @@ const Booking = ({ route, navigation }) => {
         socket.close();
     }
   }, [isFocused, popupStep]);
-
-  const handleDriverSelection = () => {
-    console.log('selection >>>', selectedDriver)
-  }
 
   const driver_sorting=async()=>{
     let driver_list = [...rideDetails.available_drivers]
@@ -143,7 +140,7 @@ const Booking = ({ route, navigation }) => {
   const hireMe = async () => {
     Ddux.setData('loading', true)
 
-    socket.emit('hire_driver', { active_vehicle: selectedDriver.active_vehicle, driver_id: selectedDriver._id, cost: parseFloat(selectedDriver.vehicle_details.cost_per_km * rideDetails.distance).toFixed(2) }, (response) => {
+    socket.emit('hire_driver', { active_vehicle: selectedDriver.active_vehicle, driver_id: selectedDriver._id, cost: parseFloat(selectedDriver.vehicle_details.cost_per_km * rideDetails.distance).toFixed(2), ride_id: rideDetails._id }, (response) => {
       Ddux.setData('loading', false)
       if (response) {
         if (response == false)
