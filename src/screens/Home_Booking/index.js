@@ -103,7 +103,7 @@ const Booking = ({ route, navigation }) => {
           setSelectedDriver(prev => {
             if (!prev)
               return prev
-            const isSelectedDriverStillAvailable = response.available_drivers.filter(driver_id => driver_id == selectedDriver._id)
+            const isSelectedDriverStillAvailable = response.available_drivers.filter(driver_id => driver_id == selectedDriver?._id)
             if (isSelectedDriverStillAvailable.length < 1)
               return null
             else

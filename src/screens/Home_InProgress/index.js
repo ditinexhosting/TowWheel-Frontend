@@ -27,6 +27,8 @@ const InProgress = ({ route, navigation }) => {
   const [driverVehicleDetails, setDriverVehicleDetails] = useState(null)
   const [arrivingIn, setArrivingIn] = useState('0')
   const [newMessageCount, setNewMessageCount] = useState(0)
+  const [nearestGarage, setNearestGarage] = useState([])
+  const [selectedGarage, setSelectedGarage] = useState(null)
   const [, forceRender] = useReducer(x => x + 1, 0);
 
 
@@ -40,6 +42,10 @@ const InProgress = ({ route, navigation }) => {
         socket.close();
     }
   }, [isFocused]);
+
+  useEffect(()=>{
+    getNearestGarages()
+  },[])
 
   /*
    * Socket Handler
@@ -103,11 +109,23 @@ const InProgress = ({ route, navigation }) => {
     Linking.openURL(phoneNumber);
   };
 
+  const getNearestGarages = async () => {
+    /*
+     * API GetNearestGarages
+     */
+    const location = rideDetails.destination
+    let response = await API.getNearestGarages(location.latitude, location.longitude)
+    if (!response.status) {
+        return Toast.show({ type: 'error', message: response.error })
+    }
+    setNearestGarage(response.data)
+}
+
   
   return (
     <Container isTransparentStatusBar={false}>
       <Header _this={{ navigation }} />
-      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails, arrivingIn, setArrivingIn, cancelRideRequest, callDriver, newMessageCount, setNewMessageCount }} />
+      <Body _this={{ navigation, map, rideDetails, driverVehicleDetails, arrivingIn, setArrivingIn, cancelRideRequest, callDriver, newMessageCount, setNewMessageCount, nearestGarage }} />
     </Container>
   )
 }

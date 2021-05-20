@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     TextInput,
     FlatList,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    Alert
 } from 'react-native';
 import { useTheme } from 'src/hooks'
 import style from './style'
@@ -55,7 +56,14 @@ const TowSearchProgress = ({ _this }) => {
             <View style={[styles.flexRow, styles.alignCenter, styles.spaceBetween, styles.marginTop10]}>
                 <View style={[styles.flexRow, styles.alignCenter]}>
                     <Icon name='person' size={Typography.FONT_SIZE_22} color={Colors.black} />
-                    <Text style={styles.distance}>  {_this.driverVehicleDetails && _this.driverVehicleDetails.driver_details.name}</Text>
+                    <View>
+                        <Text style={styles.distance}>  {_this.driverVehicleDetails && _this.driverVehicleDetails.driver_details.name}</Text>
+                        {
+                            _this.nearestGarage.length > 0 && _this.rideDetails.ride_status == 'accepted' ?
+                                <Text style={styles.distanceGrey}>  {`Tow arriving in ${parseInt(_this.arrivingIn)} min .....`}</Text>
+                                : null
+                        }
+                    </View>
                 </View>
                 {_this.driverVehicleDetails && <View style={[styles.flexRow, styles.alignCenter]}>
                     <TouchableOpacity onPress={() => _this.callDriver()} style={[styles.flexRow, styles.callChatButton]}>
@@ -63,7 +71,7 @@ const TowSearchProgress = ({ _this }) => {
                             <Icon name='ios-call' size={Typography.FONT_SIZE_25} color={Colors.primary} />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {_this.setNewMessageCount(0); _this.navigation.navigate('Chat',{ name: _this.driverVehicleDetails.driver_details.name, partner_id: _this.driverVehicleDetails.driver_details._id, ride_id: _this.rideDetails._id })} } style={[styles.flexRow, styles.callChatButton]}>
+                    <TouchableOpacity onPress={() => { _this.setNewMessageCount(0); _this.navigation.navigate('Chat', { name: _this.driverVehicleDetails.driver_details.name, partner_id: _this.driverVehicleDetails.driver_details._id, ride_id: _this.rideDetails._id }) }} style={[styles.flexRow, styles.callChatButton]}>
                         <View style={styles.callChatButtonIcon}>
                             <Icon name='chatbubbles-sharp' size={Typography.FONT_SIZE_25} color={Colors.primary} />
                             {_this.newMessageCount > 0 && <View style={styles.badge}><Text style={styles.badgeText}>{_this.newMessageCount}</Text></View>}
@@ -73,7 +81,14 @@ const TowSearchProgress = ({ _this }) => {
             </View>
 
             <View style={[styles.flex1, styles.centerAll]}>
-                <Text style={styles.popupTitle}>{_this.rideDetails.ride_status == 'accepted' ? `Tow arriving in ${parseInt(_this.arrivingIn)} min .....` : 'Tow ride started ...\n Please complete payment by cash.'} </Text>
+                {
+                    _this.nearestGarage.length > 0 && _this.rideDetails.ride_status == 'accepted' ?
+                        <GarageList _this={_this} />
+                        :
+                        <Text style={styles.popupTitle}>{_this.rideDetails.ride_status == 'accepted' ? `Tow arriving in ${parseInt(_this.arrivingIn)} min .....` : 'Tow ride started ...\n Please complete payment by cash.'} </Text>
+
+                }
+
             </View>
 
             {_this.rideDetails.ride_status == 'accepted' && <TouchableOpacity onPress={() => _this.cancelRideRequest()} style={[styles.marginBottom10, styles.flexRow, styles.continueButton]}>
@@ -85,6 +100,56 @@ const TowSearchProgress = ({ _this }) => {
         </View>
     )
 
+}
+
+
+const GarageList = ({ _this }) => {
+    const [Colors, styles] = useTheme(style)
+
+    const renderItem = ({ item, index }) => {
+
+        const rating = ()=>{
+            let rateSum = 0
+            for( const rate of item.rating){
+                rateSum += rate
+            }
+            const averageRating = (rateSum/item.rating.length).toFixed(1)
+            return averageRating
+        }
+
+        return (
+            <TouchableWithoutFeedback onPress={() => null} >
+                <View style={styles.garageContainer}>
+                    <Image source={{ uri: API_STORAGE + item.image }} style={styles.dp} />
+                    <Text style={styles.itemName}>{item.name}</Text>
+                    <Text numberOfLines={1} style={styles.address}> {item.address} </Text>
+                    <View style={styles.rating}>
+                        <Icon2 name='star' size={Typography.FONT_SIZE_16} color={Colors.primary} />
+                        <Text style={styles.ratingValue}> {rating()}</Text>
+                    </View>
+                </View>
+            </TouchableWithoutFeedback>
+        )
+    }
+
+    return (
+        <FlatList
+            //contentContainerStyle={styles.flatlist}
+            data={_this.nearestGarage}
+            renderItem={renderItem}
+            style={[styles.fullWidth]}
+            ItemSeparatorComponent={null}
+            keyExtractor={(item, index) => index.toString()}
+            keyboardShouldPersistTaps='handled'
+            onEndReached={() => null}
+            refreshing={false}
+            onRefresh={() => null}
+            horizontal={true}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={null}
+            ListHeaderComponent={null}
+        />
+    )
 }
 
 
