@@ -106,6 +106,22 @@ const TowSearchProgress = ({ _this }) => {
 const GarageList = ({ _this }) => {
     const [Colors, styles] = useTheme(style)
 
+    const confirmChange = (item) => {
+        Alert.alert(
+            "Change destination to selected Garage ?",
+            `Would you like to change your initial drop-off point from ${_this.rideDetails.destination.address} to ${item.address}`,
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => null,
+                    style: "cancel"
+                },
+                { text: "OK", onPress: () => _this.changeDestination(item) }
+            ],
+            { cancelable: false }
+        );
+    }
+
     const renderItem = ({ item, index }) => {
 
         const rating = ()=>{
@@ -118,7 +134,7 @@ const GarageList = ({ _this }) => {
         }
 
         return (
-            <TouchableWithoutFeedback onPress={() => null} >
+            <TouchableWithoutFeedback onPress={() => confirmChange(item)} >
                 <View style={styles.garageContainer}>
                     <Image source={{ uri: API_STORAGE + item.image }} style={styles.dp} />
                     <Text style={styles.itemName}>{item.name}</Text>
