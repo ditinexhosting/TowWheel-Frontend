@@ -30,6 +30,8 @@ const InProgress = ({ route, navigation }) => {
   const [nearestGarage, setNearestGarage] = useState([])
   const [, forceRender] = useReducer(x => x + 1, 0);
 
+  console.log('Ride details outside socket >>',rideDetails.destination)
+
   useEffect(() => {
     if (isFocused) {
       socketHandler()
@@ -80,7 +82,10 @@ const InProgress = ({ route, navigation }) => {
     })
 
     socket.on('start_tow_ride', (response) => {
-      Ddux.setCache('ride', { ...rideDetails, ride_status: 'started' })
+      const temp = {...rideDetails}
+      temp.destination = {address: response.address, latitude: response.coordinates[1], longitude: response.coordinates[0]}
+      temp.ride_status = 'started'
+      Ddux.setCache('ride',temp)
     })
 
     socket.on('complete_ride', (response) => {
